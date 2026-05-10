@@ -13,7 +13,7 @@ export default function HomePage() {
   const handleOpenModal = () => setModalOpen(true)
 
   return (
-    <div className="bg-white antialiased">
+    <div className="bg-[#F5F2FF] antialiased">
       <Navbar onOpenModal={handleOpenModal} />
       <main>
         <HeroSection onOpenModal={handleOpenModal} />
