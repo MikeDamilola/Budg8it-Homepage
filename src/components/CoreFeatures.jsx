@@ -1,88 +1,88 @@
-import { ClipboardList, Landmark, Receipt, Workflow } from 'lucide-react'
+function PaymentIcon() {
+  return (
+    <div className="relative h-16 w-16">
+      <div className="absolute bottom-1 left-3 h-3 w-10 rounded-full bg-black/10 blur-sm" aria-hidden />
+      <svg viewBox="0 0 64 64" className="h-16 w-16" aria-hidden>
+        <rect x="20" y="8" width="30" height="20" rx="5" fill="#26A69A" transform="rotate(8 35 18)" />
+        <rect x="23" y="15" width="24" height="4" rx="2" fill="#00796B" transform="rotate(8 35 18)" />
+        <rect x="8" y="28" width="36" height="10" rx="4" fill="#7E57C2" />
+        <circle cx="51" cy="30" r="5" fill="#FFD54F" />
+        <path d="M17 47c4-6 10-8 16-7 4 1 8 4 11 8-9 5-18 6-27-1Z" fill="#FFAB91" />
+      </svg>
+    </div>
+  )
+}
 
-const pillars = [
+function WalletIcon() {
+  return (
+    <div className="relative h-16 w-16">
+      <div className="absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-100/60" />
+      <div className="absolute bottom-1 left-3 h-3 w-10 rounded-full bg-black/10 blur-sm" aria-hidden />
+      <svg viewBox="0 0 64 64" className="relative h-16 w-16" aria-hidden>
+        <g transform="rotate(-10 32 32)">
+          <rect x="10" y="22" width="44" height="24" rx="7" fill="#00796B" />
+          <rect x="14" y="25" width="36" height="11" rx="5" fill="#4DB6AC" />
+          <circle cx="46" cy="20" r="6" fill="#FFD54F" />
+        </g>
+      </svg>
+    </div>
+  )
+}
+
+function WithdrawalIcon() {
+  return (
+    <div className="relative h-16 w-16">
+      <div className="absolute bottom-1 left-3 h-3 w-10 rounded-full bg-black/10 blur-sm" aria-hidden />
+      <svg viewBox="0 0 64 64" className="h-16 w-16" aria-hidden>
+        <g transform="translate(13 14) rotate(-5 18 18)">
+          <rect x="0" y="0" width="22" height="36" rx="5" fill="#43A047" />
+          <rect x="4" y="4" width="14" height="26" rx="2" fill="#B9F6CA" opacity="0.4" />
+        </g>
+        <g transform="translate(28 10) rotate(10 11 18)">
+          <rect x="0" y="0" width="22" height="36" rx="5" fill="#CDDC39" />
+          <rect x="4" y="4" width="14" height="26" rx="2" fill="#FFFFFF" opacity="0.35" />
+        </g>
+        <circle cx="32" cy="35" r="6" fill="#FFD700" />
+        <circle cx="30" cy="33" r="1.7" fill="#FFF4B5" />
+      </svg>
+    </div>
+  )
+}
+
+const features = [
   {
-    badge: 'COLLECT',
-    title: 'Frictionless invoicing meets modern checkout',
-    copy: 'Send a link once, optionally add SKUs or notes, close the loop instantly when funds land.',
-    icon: Receipt,
-    highlights: ['Branded payer experience', 'Status notifications', 'Unified ledger view'],
+    title: 'Create Payment Links Instantly',
+    body: 'Share a unique link via WhatsApp, Instagram, SMS, or anywhere and receive payments without stress.',
+    icon: PaymentIcon,
   },
   {
-    badge: 'ORCHESTRATE',
-    title: 'Rules that automate the busywork',
-    copy: 'Route deposits by client, geography, or product line without manual splits every Friday.',
-    icon: Workflow,
-    highlights: ['Multi-wallet routing', 'Approvals-ready audit trail', 'Saved templates'],
+    title: 'Smart Wallet Savings',
+    body: 'Every deposit goes straight to your secure wallet, with the option to save automatically.',
+    icon: WalletIcon,
   },
   {
-    badge: 'GROW CAPITAL',
-    title: 'Savings ladders without another bank tab',
-    copy: 'Set percentage or fixed pulls on each deposit so reserves grow while you operate.',
-    icon: Landmark,
-    highlights: ['Round-ups & ladders', 'Guardrails before transfers', 'Projected runway'],
-  },
-  {
-    badge: 'CLARITY',
-    title: 'Visibility your accountant will love',
-    copy: 'Every movement exports cleanly with context so month-end reconciliations take minutes.',
-    icon: ClipboardList,
-    highlights: ['CSV-ready exports', 'Role-based workspaces', 'API hooks (soon)'],
+    title: 'Easy Withdrawals',
+    body: 'Cash out to your bank anytime with smooth, fast processing.',
+    icon: WithdrawalIcon,
   },
 ]
 
 export default function CoreFeatures() {
   return (
-    <section id="features" className="bg-[#F4F6FB] px-6 py-20">
+    <section id="features" className="bg-white px-6 py-20 sm:px-10 lg:px-24">
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-xl">
-            <span className="text-xs font-semibold tracking-[0.2em] text-gray-400">
-              CORE FEATURES
-            </span>
-            <h2 className="mt-4 text-3xl font-bold text-[#0F172A] sm:text-[2.65rem] sm:leading-tight">
-              The operating layer for payouts, wallets, and automatic savings.
-            </h2>
-          </div>
-          <p className="max-w-xl text-base text-gray-600 lg:text-right">
-            Budg8it keeps payer flows lightweight on the surface while enforcing structure underneath.
-            Dial up automation as your team scales—no ripping out spreadsheets mid-quarter.
-          </p>
-        </div>
-
-        <div className="mt-14 grid gap-6 lg:grid-cols-2">
-          {pillars.map((feature) => {
+        <h2 className="mb-16 text-center text-3xl font-extrabold text-[#0F172A]">Core Features</h2>
+        <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-3 md:gap-16">
+          {features.map((feature, index) => {
             const Icon = feature.icon
             return (
               <article
                 key={feature.title}
-                className="flex h-full flex-col rounded-[28px] border border-gray-100 bg-white p-8 shadow-[0px_32px_80px_-48px_rgba(15,23,42,0.45)]"
+                className={`flex flex-col items-start gap-4 ${index < 2 ? 'md:border-r md:border-gray-100 md:pr-16' : ''}`}
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="space-y-2">
-                    <p className="text-[11px] font-semibold tracking-wide text-gray-400">
-                      {feature.badge}
-                    </p>
-                    <h3 className="text-xl font-semibold text-[#0F172A] sm:text-[1.35rem] leading-snug">
-                      {feature.title}
-                    </h3>
-                  </div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0F172A]/5 text-[#0F172A]">
-                    <Icon size={24} aria-hidden />
-                  </div>
-                </div>
-                <p className="mt-4 flex-1 text-sm leading-relaxed text-gray-600">{feature.copy}</p>
-                <ul className="mt-8 space-y-2">
-                  {feature.highlights.map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-center gap-2 text-sm font-medium text-[#0F172A]"
-                    >
-                      <span className="h-2 w-2 rounded-full bg-[#94A4FF]" aria-hidden />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
+                <Icon />
+                <h3 className="mt-2 text-xl font-bold text-[#0F172A]">{feature.title}</h3>
+                <p className="mt-2 max-w-xs text-base leading-relaxed text-gray-500">{feature.body}</p>
               </article>
             )
           })}
