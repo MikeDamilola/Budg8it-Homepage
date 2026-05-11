@@ -1,17 +1,18 @@
 import { ArrowUpRight } from 'lucide-react'
+import logoUrl from '../assets/Logo White.svg'
 
 const columns = [
   {
-    title: 'Product',
-    links: ['Features', 'Security', 'Roadmap'],
+    title: 'Quick Links',
+    links: ['Home', 'Features', 'FAQs', 'Join Waitlist'],
   },
   {
-    title: 'Company',
-    links: ['About', 'Careers', 'Press'],
+    title: 'Features',
+    links: ['Payment Links', 'Smart Wallets', 'Withdrawal System'],
   },
   {
-    title: 'Resources',
-    links: ['Help center', 'API docs', 'Status'],
+    title: 'Contact',
+    links: ['support@budg8it.app',],
   },
 ]
 
@@ -50,22 +51,19 @@ export default function Footer({ onOpenModal }) {
 
         <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <div className="flex items-center gap-2">
-              <div className="rounded-lg bg-white p-1">
-                <span className="block px-1 text-xs font-bold text-[#0F172A]">B</span>
-              </div>
-              <span className="text-lg font-bold">Budg8it</span>
-            </div>
-            <p className="mt-4 text-sm text-white/70">
-              Payment links, smart wallets, and automated savings for teams that outgrew patchwork
-              finance tools.
-            </p>
+            <img
+              src={logoUrl}
+              alt="Budg8it"
+              width={120}
+              height={40}
+              decoding="async"
+              className="h-8 w-auto object-contain"
+            />
+            <p className="mt-4 text-sm text-white/70">Get Paid Instantly. Save Seamlessly. All in One Wallet.</p>
           </div>
           {columns.map((col) => (
             <div key={col.title}>
-              <p className="text-sm font-semibold uppercase tracking-wide text-white/50">
-                {col.title}
-              </p>
+              <p className="text-sm font-semibold sentencecase tracking-wide text-white/50">{col.title}</p>
               <ul className="mt-4 space-y-2 text-sm text-white/80">
                 {col.links.map((link) => (
                   <li key={link}>

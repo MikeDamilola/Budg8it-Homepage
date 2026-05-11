@@ -40,7 +40,7 @@ export default function CoreFeatures() {
                 decoding="async"
                 aria-hidden
               />
-              <h3 className="text-xl font-bold text-[#0F172A]">{feature.title}</h3>
+              <h3 className="text-lg font-bold text-[#0F172A]">{feature.title}</h3>
               <p className="max-w-xs flex-1 text-base leading-relaxed text-gray-500">{feature.body}</p>
             </article>
           ))}
