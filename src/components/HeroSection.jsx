@@ -27,7 +27,7 @@ export default function HeroSection({ onOpenModal }) {
         <div className="mt-6 flex flex-wrap justify-center gap-4">
           <button
             type="button"
-            className="flex cursor-pointer items-center gap-2 rounded-xl bg-[#192250] px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[#0F172A]/30 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="flex cursor-pointer items-center gap-1.5 rounded-full bg-[#192250] px-5 py-2 text-sm font-medium text-white transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[#0F172A]/30 focus-visible:ring-offset-2 focus-visible:outline-none"
             onClick={onOpenModal}
           >
             Join Waitlist
@@ -35,7 +35,7 @@ export default function HeroSection({ onOpenModal }) {
           </button>
           <button
             type="button"
-            className="cursor-pointer rounded-xl border-[2.0px] border-[#192250] bg-white px-6 py-3 text-sm font-medium text-[#0F172A] transition hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#192250]/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="cursor-pointer rounded-full border border-[#192250] bg-white px-5 py-2 text-sm font-medium text-[#0F172A] transition hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#192250]/40 focus-visible:ring-offset-2 focus-visible:outline-none"
             onClick={scrollToFeatures}
           >
             Learn more

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import logoUrl from '../assets/Logo.svg'
 import createAccountIconUrl from '../assets/Create account icon.svg'
 
@@ -11,9 +12,10 @@ function scrollToAnchor(id, onDone) {
   onDone?.()
 }
 
-export default function Navbar({ onOpenModal }) {
+export default function Navbar() {
   const [activeLink, setActiveLink] = useState('Home')
   const [mobileOpen, setMobileOpen] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!mobileOpen) return
@@ -31,7 +33,7 @@ export default function Navbar({ onOpenModal }) {
     }
   }, [mobileOpen])
 
-  const navigate = (label, anchorId) => () => {
+  const navigateToSection = (label, anchorId) => () => {
     setActiveLink(label)
     scrollToAnchor(anchorId, () => setMobileOpen(false))
   }
@@ -39,9 +41,9 @@ export default function Navbar({ onOpenModal }) {
   const linkClass = (label) =>
     `${activeLink === label ? 'font-bold text-[#0F172A]' : 'font-normal text-gray-400 hover:text-[#0F172A]'} transition focus-visible:ring-2 focus-visible:ring-[#0F172A]/20 focus-visible:ring-offset-2 focus-visible:outline-none rounded-full px-1`
 
-  const handleOpenModal = () => {
+  const handleCreateAccount = () => {
     setMobileOpen(false)
-    onOpenModal()
+    navigate('/signup')
   }
 
   return (
@@ -66,21 +68,21 @@ export default function Navbar({ onOpenModal }) {
             <button
               type="button"
               className={`${linkClass('Home')} cursor-pointer`}
-              onClick={navigate('Home', 'home')}
+              onClick={navigateToSection('Home', 'home')}
             >
               Home
             </button>
             <button
               type="button"
               className={`${linkClass('Features')} cursor-pointer`}
-              onClick={navigate('Features', 'features')}
+              onClick={navigateToSection('Features', 'features')}
             >
               Features
             </button>
             <button
               type="button"
               className={`${linkClass('Contact Us')} cursor-pointer`}
-              onClick={navigate('Contact Us', 'contact')}
+              onClick={navigateToSection('Contact Us', 'contact')}
             >
               Contact Us
             </button>
@@ -90,7 +92,7 @@ export default function Navbar({ onOpenModal }) {
             <button
               type="button"
               className="flex cursor-pointer items-center gap-1.5 rounded-full bg-[#192250] px-5 py-2 text-sm font-medium text-white transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[#192250]/40 focus-visible:ring-offset-2 focus-visible:outline-none"
-              onClick={handleOpenModal}
+              onClick={handleCreateAccount}
             >
               Create Account
               <img
@@ -121,21 +123,21 @@ export default function Navbar({ onOpenModal }) {
               <button
                 type="button"
                 className={`${linkClass('Home')} rounded-xl py-3 text-left`}
-                onClick={navigate('Home', 'home')}
+                onClick={navigateToSection('Home', 'home')}
               >
                 Home
               </button>
               <button
                 type="button"
                 className={`${linkClass('Features')} rounded-xl py-3 text-left`}
-                onClick={navigate('Features', 'features')}
+                onClick={navigateToSection('Features', 'features')}
               >
                 Features
               </button>
               <button
                 type="button"
                 className={`${linkClass('Contact Us')} rounded-xl py-3 text-left`}
-                onClick={navigate('Contact Us', 'contact')}
+                onClick={navigateToSection('Contact Us', 'contact')}
               >
                 Contact Us
               </button>
@@ -143,7 +145,7 @@ export default function Navbar({ onOpenModal }) {
             <button
               type="button"
               className="mt-4 flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[#192250] px-5 py-3 text-sm font-medium text-white transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[#192250]/40 focus-visible:ring-offset-2 focus-visible:outline-none"
-              onClick={handleOpenModal}
+              onClick={handleCreateAccount}
             >
               Create Account
               <img

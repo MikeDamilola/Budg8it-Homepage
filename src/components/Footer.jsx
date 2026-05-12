@@ -18,9 +18,9 @@ const columns = [
 
 export default function Footer({ onOpenModal }) {
   return (
-    <footer className="bg-[#0F172A] px-6 py-16 text-white">
+    <footer className="bg-[#0F172A] px-6 py-4 text-white">
       <div className="mx-auto max-w-6xl">
-        <div
+        {/* <div
           id="contact"
           className="flex flex-col gap-10 rounded-[32px] border border-white/10 bg-white/5 p-10 lg:flex-row lg:items-center lg:justify-between"
         >
@@ -47,7 +47,7 @@ export default function Footer({ onOpenModal }) {
               <ArrowUpRight size={16} aria-hidden />
             </button>
           </div>
-        </div>
+        </div> */}
 
         <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -59,11 +59,15 @@ export default function Footer({ onOpenModal }) {
               decoding="async"
               className="h-8 w-auto object-contain"
             />
-            <p className="mt-4 text-sm text-white/70">Get Paid Instantly. Save Seamlessly. All in One Wallet.</p>
+            <p className="mt-4 text-sm text-white/70">
+            Get Paid Instantly. Save Seamlessly. All in One Wallet.
+            </p>
           </div>
           {columns.map((col) => (
             <div key={col.title}>
-              <p className="text-sm font-semibold sentencecase tracking-wide text-white/50">{col.title}</p>
+              <p className="text-sm font-semibold sentencecase tracking-wide text-white/50">
+                {col.title}
+              </p>
               <ul className="mt-4 space-y-2 text-sm text-white/80">
                 {col.links.map((link) => (
                   <li key={link}>
