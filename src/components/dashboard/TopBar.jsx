@@ -1,20 +1,31 @@
 import { useState } from 'react'
 import { Bell, ChevronDown, Search } from 'lucide-react'
+import budgetitLogoUrl from '../../assets/Logo BudgetIt.png'
 
 export default function TopBar() {
   const [search, setSearch] = useState('')
 
   return (
     <header className="fixed inset-x-0 top-0 z-30 flex min-h-[64px] items-center justify-between border-b border-gray-100 bg-white px-4 py-3 md:left-[220px] md:px-6">
-      <div className="flex max-w-full flex-1 items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-4 py-2 md:w-[340px] md:max-w-[340px]">
-        <Search size={16} className="flex-shrink-0 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-transparent text-sm text-gray-600 outline-none placeholder:text-gray-400"
+      <div className="flex min-w-0 flex-1 items-center gap-2 md:gap-3">
+        <img
+          src={budgetitLogoUrl}
+          alt="Budg8it"
+          width={108}
+          height={36}
+          decoding="async"
+          className="h-7 w-auto shrink-0 object-contain md:hidden"
         />
+        <div className="flex max-w-full min-w-0 flex-1 items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-4 py-2 md:w-[340px] md:max-w-[340px]">
+          <Search size={16} className="flex-shrink-0 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full bg-transparent text-sm text-gray-600 outline-none placeholder:text-gray-400"
+          />
+        </div>
       </div>
 
       <div className="ml-3 flex flex-shrink-0 items-center gap-3 md:gap-4">
