@@ -1,4 +1,3 @@
-import { ArrowUpRight } from 'lucide-react'
 import logoUrl from '../assets/Logo White.svg'
 
 const columns = [
@@ -73,6 +72,9 @@ export default function Footer({ onOpenModal }) {
                   <li key={link}>
                     <button
                       type="button"
+                      onClick={() => {
+                        if (link === 'Join Waitlist') onOpenModal?.()
+                      }}
                       className="text-left transition hover:text-white focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A] focus-visible:outline-none"
                     >
                       {link}

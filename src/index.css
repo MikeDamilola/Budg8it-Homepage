@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+/* Ensure Tailwind scans all app sources (fixes missing styles / “blank” UI in some setups) */
+@source "../index.html";
+@source "./**/*.{js,jsx}";
+
 html {
   scroll-behavior: smooth;
 }
@@ -12,4 +16,15 @@ body {
 #root {
   min-height: 100vh;
   width: 100%;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
