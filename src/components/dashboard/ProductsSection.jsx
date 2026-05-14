@@ -6,9 +6,9 @@ import {
   MoreVertical,
   ShoppingCart,
 } from 'lucide-react'
-import product1 from '../../assets/HowItWorks1.png'
-import product2 from '../../assets/HowItWorks2.jpg'
-import product3 from '../../assets/HowItWorks3.jpg'
+import product1 from '../../assets/Product1.png'
+import product2 from '../../assets/Product2.png'
+import product3 from '../../assets/Product3.png'
 
 const products = [
   {

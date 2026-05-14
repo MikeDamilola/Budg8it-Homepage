@@ -36,7 +36,7 @@ export default function StatsRow() {
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
+          className="flex min-h-[152px] flex-col rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
         >
           <div
             className={`mb-3 flex h-10 w-10 items-center justify-center rounded-full ${stat.iconBg}`}

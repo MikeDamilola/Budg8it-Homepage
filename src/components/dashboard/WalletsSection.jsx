@@ -1,10 +1,13 @@
 import { BarChart3, Briefcase, MoreVertical, Plus, Receipt } from 'lucide-react'
+import wallet1Url from '../../assets/Wallet1.png'
+import wallet2Url from '../../assets/Wallet2.png'
+import wallet3Url from '../../assets/Wallet3.png'
 
 const wallets = [
   {
     name: 'Expenses Wallet',
     icon: Receipt,
-    bg: 'from-[#4A7C59] to-[#3A6B49]',
+    imageUrl: wallet1Url,
     autoSave: '25%',
     amountSaved: '₦45,500.00',
     available: '₦12,500.00',
@@ -13,7 +16,7 @@ const wallets = [
   {
     name: 'Business Funds',
     icon: Briefcase,
-    bg: 'from-[#7B6BA8] to-[#6B5B98]',
+    imageUrl: wallet2Url,
     autoSave: '25%',
     amountSaved: '₦45,500.00',
     available: '₦12,500.00',
@@ -22,7 +25,7 @@ const wallets = [
   {
     name: 'Weekly Stocks',
     icon: BarChart3,
-    bg: 'from-[#B8A040] to-[#A89030]',
+    imageUrl: wallet3Url,
     autoSave: '25%',
     amountSaved: '₦45,500.00',
     available: '₦12,500.00',
@@ -50,38 +53,52 @@ export default function WalletsSection() {
           return (
             <div
               key={w.name}
-              className={`relative min-h-[200px] overflow-hidden rounded-2xl bg-gradient-to-br p-5 text-white ${w.bg}`}
+              className="relative min-h-[200px] overflow-hidden rounded-2xl text-white shadow-sm"
             >
-              <div className="mb-6 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Icon size={16} className="text-white/80" />
-                  <span className="text-sm font-semibold text-white">{w.name}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex flex-col items-center rounded-lg bg-white/20 px-2 py-1 text-center text-[10px] font-bold text-white">
-                    <span>AUTO</span>
-                    <span>SAVE</span>
-                    <span>{w.autoSave}</span>
+              <img
+                src={w.imageUrl}
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover"
+                width={400}
+                height={300}
+                decoding="async"
+              />
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/15"
+                aria-hidden
+              />
+              <div className="relative z-10 flex min-h-[200px] flex-col p-5">
+                <div className="mb-6 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Icon size={16} className="text-white/90 drop-shadow-sm" />
+                    <span className="text-sm font-semibold text-white drop-shadow-sm">{w.name}</span>
                   </div>
-                  <button type="button" className="text-white/70" aria-label="More options">
-                    <MoreVertical size={16} />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <div className="flex flex-col items-center rounded-lg bg-white/20 px-2 py-1 text-center text-[8px] font-bold text-white backdrop-blur-[2px]">
+                      <span>AUTO</span>
+                      <span>SAVE</span>
+                      <span>{w.autoSave}</span>
+                    </div>
+                    <button type="button" className="text-white/90 drop-shadow-sm" aria-label="More options">
+                      <MoreVertical size={16} />
+                    </button>
+                  </div>
                 </div>
+
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-white/85">
+                  AMOUNT SAVED
+                </p>
+                <p className="mt-1 text-2xl font-bold text-white drop-shadow-sm">{w.amountSaved}</p>
+
+                <div className="my-3 border-t border-white/25" />
+
+                <p className="text-[10px] uppercase tracking-wider text-white/85">
+                  AVAILABLE FOR WITHDRAWAL
+                </p>
+                <p className="mt-1 text-xl font-bold text-white drop-shadow-sm">{w.available}</p>
+
+                <p className="mt-3 text-xs text-white/80">{w.linked}</p>
               </div>
-
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-white/60">
-                AMOUNT SAVED
-              </p>
-              <p className="mt-1 text-2xl font-bold text-white">{w.amountSaved}</p>
-
-              <div className="my-3 border-t border-white/20" />
-
-              <p className="text-[10px] uppercase tracking-wider text-white/60">
-                AVAILABLE FOR WITHDRAWAL
-              </p>
-              <p className="mt-1 text-xl font-bold text-white">{w.available}</p>
-
-              <p className="mt-3 text-xs text-white/60">{w.linked}</p>
             </div>
           )
         })}

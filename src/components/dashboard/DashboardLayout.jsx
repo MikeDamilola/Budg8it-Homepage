@@ -10,15 +10,21 @@ export default function DashboardLayout({ children }) {
       <Sidebar />
       <TopBar />
 
-      <main className="ml-0 mt-[64px] min-h-screen flex-1 overflow-y-auto px-4 py-6 md:ml-[220px] md:px-6 lg:mr-[280px]">
-        {children}
-      </main>
+      <main className="ml-0 mt-[64px] min-h-screen flex-1 overflow-y-auto px-4 py-6 md:ml-[220px] md:px-6">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:gap-6">
+          <div className="min-w-0 flex-1">{children}</div>
 
-      <aside className="fixed right-0 top-[64px] bottom-0 z-30 hidden w-[280px] flex-col gap-6 overflow-y-auto border-l border-gray-100 bg-white px-5 py-6 lg:flex">
-        <QuickActions />
-        <StoreLinkCard />
-        <RecentTransactions />
-      </aside>
+          <div className="mt-6 hidden w-full shrink-0 flex-col gap-6 lg:mt-0 lg:flex lg:w-[280px]">
+            <QuickActions />
+            <div className="mt-2 flex flex-col gap-6">
+              <StoreLinkCard />
+              <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+                <RecentTransactions />
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   )
 }
