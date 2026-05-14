@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import slideshow1Url from '../../assets/Slideshow1.svg'
 import slideshow2Url from '../../assets/Slideshow2.svg'
@@ -32,14 +32,14 @@ export default function SlideShow() {
   const [current, setCurrent] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
 
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     if (isAnimating) return
     setIsAnimating(true)
     setTimeout(() => {
       setCurrent((prev) => (prev + 1) % slides.length)
       setIsAnimating(false)
     }, 300)
-  }
+  }, [isAnimating])
 
   const goToPrev = () => {
     if (isAnimating) return
@@ -51,11 +51,9 @@ export default function SlideShow() {
   }
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      goToNext()
-    }, 4000)
+    const timer = setInterval(goToNext, 4000)
     return () => clearInterval(timer)
-  }, [current])
+  }, [current, goToNext])
 
   return (
     <div className="-mt-32 w-full px-10">

@@ -4,7 +4,7 @@ import SignUpForm from '../components/auth/SignUpForm'
 export default function SignUpPage() {
   return (
     <div className="flex min-h-screen flex-row">
-      <aside className="hidden min-h-screen w-[40%] flex-col items-center justify-center bg-white md:flex">
+      <aside className="hidden min-h-screen w-[40%] flex-col items-center justify-center bg-gradient-to-r from-[#C8D5F5] via-white to-[#FDF3C8] md:flex">
         <SlideShow />
       </aside>
 

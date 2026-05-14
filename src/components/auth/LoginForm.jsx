@@ -1,18 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { CheckCircle, Eye, EyeOff } from 'lucide-react'
 import logoUrl from '../../assets/Logo.svg'
 
-export default function SignUpForm() {
+export default function LoginForm() {
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: '',
-    confirmPassword: '',
   })
   const [showPassword, setShowPassword] = useState(false)
-  const [showConfirm, setShowConfirm] = useState(false)
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -27,40 +24,29 @@ export default function SignUpForm() {
   const validate = () => {
     const newErrors = {}
 
-    if (!formData.name.trim()) newErrors.name = 'Name is required'
-
     if (!formData.email.trim()) newErrors.email = 'Email is required'
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Enter a valid email address'
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = 'Enter a valid email address'
 
     if (!formData.password) newErrors.password = 'Password is required'
-    else if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters'
-
-    if (!formData.confirmPassword) newErrors.confirmPassword = 'Please confirm your password'
-    else if (formData.password !== formData.confirmPassword)
-      newErrors.confirmPassword = 'Passwords do not match'
+    else if (formData.password.length < 8)
+      newErrors.password = 'Password must be at least 8 characters'
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
-  const handleCreateAccount = () => {
+  const handleLogIn = () => {
     if (loading) return
     if (validate()) {
       setLoading(true)
       setTimeout(() => {
         setLoading(false)
         setSubmitted(true)
+        setTimeout(() => navigate('/dashboard'), 800)
       }, 1500)
     }
   }
-
-  useEffect(() => {
-    if (!submitted) return
-    const redirectTimer = setTimeout(() => {
-      navigate('/dashboard')
-    }, 2000)
-    return () => clearTimeout(redirectTimer)
-  }, [submitted, navigate])
 
   const inputBaseClass =
     'w-full rounded-xl border bg-white px-4 py-3.5 text-sm text-gray-700 outline-none transition-all duration-200 placeholder:text-gray-300'
@@ -75,12 +61,10 @@ export default function SignUpForm() {
   if (submitted) {
     return (
       <div className="mx-auto w-full max-w-sm">
-        <div className="flex flex-col items-center justify-center rounded-2xl bg-white p-8 text-center">
-          <CheckCircle size={52} className="text-green-500" />
-          <h2 className="mt-4 text-2xl font-bold text-[#0F172A]">Account Created! 🎉</h2>
-          <p className="mt-2 text-sm text-gray-400">
-            Welcome to Budg8it. Redirecting you to your dashboard...
-          </p>
+        <div className="flex flex-col items-center justify-center text-center">
+          <CheckCircle size={52} className="mx-auto text-green-500" />
+          <h2 className="mt-4 text-2xl font-bold text-[#0F172A]">Welcome back! 👋</h2>
+          <p className="mt-2 text-sm text-gray-400">Redirecting you to your dashboard...</p>
           <Link
             to="/dashboard"
             className="mt-4 inline-block text-sm font-medium text-blue-500 underline-offset-2 hover:underline"
@@ -94,7 +78,7 @@ export default function SignUpForm() {
 
   return (
     <div className="mx-auto w-full max-w-sm">
-      <div className="mb-8 flex items-center">
+      <div className="mb-10 flex items-center">
         <img
           src={logoUrl}
           alt="Budg8it"
@@ -105,22 +89,8 @@ export default function SignUpForm() {
         />
       </div>
 
-      <h1 className="mb-2 text-3xl font-bold text-[#0F172A]">Create account</h1>
-      <p className="mb-8 max-w-sm text-sm leading-relaxed text-gray-500">
-        Join a network of businesses and individuals making secure deposits and savings.
-      </p>
-
-      <div className="mb-5">
-        <label className="mb-1.5 block text-sm font-semibold text-[#0F172A]">Name*</label>
-        <input
-          type="text"
-          placeholder="Enter your name"
-          value={formData.name}
-          onChange={handleChange('name')}
-          className={inputClass('name')}
-        />
-        {errors.name ? <p className="mt-1 text-xs text-red-500">{errors.name}</p> : null}
-      </div>
+      <h1 className="mb-1 text-3xl font-bold text-[#0F172A]">Log In</h1>
+      <p className="mb-8 text-sm text-gray-500">Log into your account</p>
 
       <div className="mb-5">
         <label className="mb-1.5 block text-sm font-semibold text-[#0F172A]">Email*</label>
@@ -135,7 +105,16 @@ export default function SignUpForm() {
       </div>
 
       <div className="mb-5">
-        <label className="mb-1.5 block text-sm font-semibold text-[#0F172A]">Password*</label>
+        <div className="mb-1.5 flex items-center justify-between">
+          <label className="text-sm font-semibold text-[#0F172A]">Password*</label>
+          <button
+            type="button"
+            onClick={() => navigate('/forgot-password')}
+            className="cursor-pointer text-sm text-gray-400 transition hover:text-[#0F172A]"
+          >
+            Forget Password?
+          </button>
+        </div>
         <div className="relative">
           <input
             type={showPassword ? 'text' : 'password'}
@@ -153,43 +132,18 @@ export default function SignUpForm() {
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
         </div>
-        <p className="mt-1.5 text-xs text-gray-400">Must be at least 8 characters.</p>
         {errors.password ? <p className="mt-1 text-xs text-red-500">{errors.password}</p> : null}
-      </div>
-
-      <div className="mb-5">
-        <label className="mb-1.5 block text-sm font-semibold text-[#0F172A]">Confirm Password*</label>
-        <div className="relative">
-          <input
-            type={showConfirm ? 'text' : 'password'}
-            placeholder="Confirm password"
-            value={formData.confirmPassword}
-            onChange={handleChange('confirmPassword')}
-            className={`${inputClass('confirmPassword')} pr-12`}
-          />
-          <button
-            type="button"
-            onClick={() => setShowConfirm(!showConfirm)}
-            className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-400 transition hover:text-gray-600"
-            aria-label={showConfirm ? 'Hide confirm password' : 'Show confirm password'}
-          >
-            {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
-          </button>
-        </div>
-        {errors.confirmPassword ? (
-          <p className="mt-1 text-xs text-red-500">{errors.confirmPassword}</p>
-        ) : null}
       </div>
 
       <button
         type="button"
-        onClick={handleCreateAccount}
-        className="mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#0F172A] py-3.5 text-sm font-semibold text-white transition hover:opacity-90"
+        onClick={handleLogIn}
+        className="mt-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#0F172A] py-3.5 text-sm font-semibold text-white transition hover:opacity-90"
       >
         {loading ? (
           <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
         ) : (
-          'Create account'
+          'Log in'
         )}
       </button>
 
@@ -221,10 +175,10 @@ export default function SignUpForm() {
       <p className="mt-6 text-center text-sm text-gray-500">
         Already have an account?{' '}
         <span
-          className="cursor-pointer font-medium text-blue-500 hover:underline"
-          onClick={() => navigate('/login')}
+          className="cursor-pointer font-medium text-blue-500 transition hover:underline"
+          onClick={() => navigate('/signup')}
         >
-          Log in
+          Sign Up
         </span>
       </p>
     </div>
