@@ -1,50 +1,13 @@
 import { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import logoUrl from '../../assets/Logo.svg'
-import homeIconUrl from '../../assets/Home Icon.svg'
-import productIconUrl from '../../assets/Product Icon.svg'
-import walletIconUrl from '../../assets/Wallet Icon.svg'
-import transactionsIconUrl from '../../assets/Transactions Icon.svg'
-import settingsIconUrl from '../../assets/Settings Icon.svg'
-
-const navItems = [
-  {
-    label: 'Dashboard',
-    href: '/dashboard',
-    iconSrc: homeIconUrl,
-    iconTone: 'light',
-  },
-  {
-    label: 'Products',
-    href: '/products',
-    iconSrc: productIconUrl,
-    iconTone: 'dark',
-  },
-  {
-    label: 'Wallet',
-    href: '/wallet',
-    iconSrc: walletIconUrl,
-    iconTone: 'dark',
-  },
-  {
-    label: 'Transactions',
-    href: '/transactions',
-    iconSrc: transactionsIconUrl,
-    iconTone: 'dark',
-  },
-  {
-    label: 'Settings',
-    href: '/settings',
-    iconSrc: settingsIconUrl,
-    iconTone: 'dark',
-  },
-]
+import { dashboardNavItems } from './dashboardNavItems'
 
 export default function Sidebar() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const active = useMemo(() => {
-    const match = navItems.find((item) => item.href === pathname)
+    const match = dashboardNavItems.find((item) => item.href === pathname)
     return match?.label ?? 'Dashboard'
   }, [pathname])
 
@@ -62,7 +25,7 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex flex-1 flex-col gap-0.5 px-0">
-        {navItems.map((item) => {
+        {dashboardNavItems.map((item) => {
           const isActive = active === item.label
           const iconClass =
             item.iconTone === 'light'
