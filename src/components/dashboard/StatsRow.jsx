@@ -39,7 +39,7 @@ export default function StatsRow() {
           className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
         >
           <div
-            className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${stat.iconBg}`}
+            className={`mb-3 flex h-10 w-10 items-center justify-center rounded-full ${stat.iconBg}`}
           >
             <img
               src={stat.iconSrc}
