@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import AddProductModal from '../components/dashboard/add-product/AddProductModal'
-import SetupWalletModal from '../components/dashboard/add-product/SetupWalletModal'
+import GeneratePaymentLink from '../components/dashboard/generate-payment-link/GeneratePaymentLink'
 import DashboardLayout from '../components/dashboard/DashboardLayout'
 import ProductsSection from '../components/dashboard/ProductsSection'
 import MobileQuickActions from '../components/dashboard/MobileQuickActions'
@@ -17,24 +17,25 @@ const footerItems = [
 
 export default function DashboardPage() {
   const [isAddProductOpen, setIsAddProductOpen] = useState(false)
-  const [isSetupWalletOpen, setIsSetupWalletOpen] = useState(false)
-  const [productDraft, setProductDraft] = useState(null)
+  const [isGenerateLinkOpen, setIsGenerateLinkOpen] = useState(false)
 
   const openAddProduct = () => setIsAddProductOpen(true)
+  const openGenerateLink = () => setIsGenerateLinkOpen(true)
 
-  const handleAddProductProceed = (data) => {
-    setProductDraft(data)
+  const handleCloseAddProduct = () => {
     setIsAddProductOpen(false)
-    setIsSetupWalletOpen(true)
   }
 
-  const handleCloseWalletSetup = () => {
-    setIsSetupWalletOpen(false)
-    setProductDraft(null)
+  const handleCloseGenerateLink = () => {
+    setIsGenerateLinkOpen(false)
+  }
+
+  const handleGenerateLinkProceed = () => {
+    setIsGenerateLinkOpen(false)
   }
 
   return (
-    <DashboardLayout onOpenAddProduct={openAddProduct}>
+    <DashboardLayout onOpenAddProduct={openAddProduct} onOpenGenerateLink={openGenerateLink}>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-[#0F172A]">Welcome back, Serah</h1>
         <p className="mt-1 text-sm text-gray-400">
@@ -43,7 +44,7 @@ export default function DashboardPage() {
       </div>
 
       <StatsRow />
-      <MobileQuickActions onAddProduct={openAddProduct} />
+      <MobileQuickActions onAddProduct={openAddProduct} onGenerateLink={openGenerateLink} />
       <WalletsSection />
       <ProductsSection />
 
@@ -58,16 +59,11 @@ export default function DashboardPage() {
         ))}
       </footer>
 
-      <AddProductModal
-        open={isAddProductOpen}
-        onClose={() => setIsAddProductOpen(false)}
-        onProceed={handleAddProductProceed}
-      />
-
-      <SetupWalletModal
-        open={isSetupWalletOpen}
-        onClose={handleCloseWalletSetup}
-        productName={productDraft?.productName}
+      <AddProductModal open={isAddProductOpen} onClose={handleCloseAddProduct} />
+      <GeneratePaymentLink
+        open={isGenerateLinkOpen}
+        onClose={handleCloseGenerateLink}
+        onProceed={handleGenerateLinkProceed}
       />
     </DashboardLayout>
   )

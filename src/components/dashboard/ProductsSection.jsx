@@ -75,7 +75,7 @@ export default function ProductsSection() {
             <div className="relative h-[200px] w-full bg-gray-200">
               <img src={product.image} alt="" className="h-full w-full object-cover" />
 
-              <span className="absolute top-3 left-3 rounded-lg bg-[#0F172A] px-2.5 py-1 text-xs font-semibold text-white">
+              <span className="absolute top-3 left-3 rounded-lg bg-[#8394DB] px-2.5 py-1 text-xs font-semibold text-white">
                 {product.badge}
               </span>
 

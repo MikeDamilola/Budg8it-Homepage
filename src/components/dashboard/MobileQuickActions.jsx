@@ -9,7 +9,7 @@ const actions = [
   { label: 'Store Link', iconSrc: storeLinkIconUrl },
 ]
 
-export default function MobileQuickActions({ onAddProduct }) {
+export default function MobileQuickActions({ onAddProduct, onGenerateLink }) {
   return (
     <section className="mb-8 lg:hidden" aria-label="Quick Actions">
       <div className="mx-1 rounded-2xl bg-[#161B40] px-5 py-5">
@@ -23,7 +23,13 @@ export default function MobileQuickActions({ onAddProduct }) {
             <button
               key={label}
               type="button"
-              onClick={label === 'Add Product' ? onAddProduct : undefined}
+              onClick={
+                label === 'Add Product'
+                  ? onAddProduct
+                  : label === 'Generate Link'
+                    ? onGenerateLink
+                    : undefined
+              }
               className="flex min-w-0 flex-1 cursor-pointer flex-col items-center gap-2.5 transition active:opacity-80"
             >
               <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/10">

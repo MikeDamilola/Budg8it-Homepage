@@ -12,15 +12,13 @@ function getStepIconClassName(variant, isComplete) {
   const base = 'h-3.5 w-3.5 object-contain'
 
   if (isComplete) {
-    // Dark circle: Add Product.svg is already white; Wallet/Link need inversion
     return variant === 'add-product' ? base : `${base} brightness-0 invert`
   }
 
-  // White circle: Add Product.svg is white in source — darken for contrast
   return variant === 'add-product' ? `${base} brightness-0` : base
 }
 
-export default function ProductFlowStepper({ currentStep = 1 }) {
+export default function ProductFlowStepper({ currentStep = 1, onStepClick }) {
   return (
     <div
       className="w-full rounded-xl bg-[#F5F6FA] px-3 py-3.5 sm:px-4 sm:py-4"
@@ -30,13 +28,10 @@ export default function ProductFlowStepper({ currentStep = 1 }) {
         {steps.map((step) => {
           const isComplete = step.id < currentStep
           const isActive = step.id === currentStep
+          const isNavigable = isComplete && typeof onStepClick === 'function'
 
-          return (
-            <div
-              key={step.id}
-              className="flex min-w-0 flex-1 flex-col"
-              aria-current={isActive ? 'step' : undefined}
-            >
+          const stepContent = (
+            <>
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <div
                   className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors ${
@@ -71,6 +66,27 @@ export default function ProductFlowStepper({ currentStep = 1 }) {
                   />
                 )}
               </div>
+            </>
+          )
+
+          return (
+            <div
+              key={step.id}
+              className="flex min-w-0 flex-1 flex-col"
+              aria-current={isActive ? 'step' : undefined}
+            >
+              {isNavigable ? (
+                <button
+                  type="button"
+                  onClick={() => onStepClick(step.id)}
+                  className="flex w-full min-w-0 flex-col rounded-lg text-left transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F172A]/25"
+                  aria-label={`Go back to ${step.label}`}
+                >
+                  {stepContent}
+                </button>
+              ) : (
+                stepContent
+              )}
             </div>
           )
         })}
