@@ -5,7 +5,7 @@ import { Check, ChevronDown, Wallet, X } from 'lucide-react'
 const EXISTING_WALLETS = ['Expenses Wallet', 'Business Funds', 'Weekly Stocks']
 
 const inputClassName =
-  'w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#0F172A] placeholder:text-gray-400 transition focus:border-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10'
+  'box-border w-full max-w-full min-w-0 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#0F172A] placeholder:text-gray-400 transition focus:border-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10'
 
 function WalletToggle({ checked, onChange, labelId }) {
   return (
@@ -32,6 +32,7 @@ function WalletToggle({ checked, onChange, labelId }) {
 
 export default function GeneratePaymentLink({ open = true, onClose, onProceed }) {
   const closeButtonRef = useRef(null)
+  const scrollRef = useRef(null)
   const titleId = useId()
   const sliderId = useId()
   const linkToWalletLabelId = useId()
@@ -149,7 +150,7 @@ export default function GeneratePaymentLink({ open = true, onClose, onProceed })
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            className="relative flex max-h-[95vh] w-full max-w-[620px] flex-col overflow-hidden rounded-t-2xl bg-[#F5F5F0] shadow-[0_24px_80px_-12px_rgba(15,23,42,0.35)] sm:rounded-2xl"
+            className="relative flex h-[min(92dvh,95vh)] max-h-[min(95dvh,95vh)] w-full max-w-[500px] flex-col overflow-hidden rounded-t-2xl bg-white shadow-[0_24px_80px_-12px_rgba(15,23,42,0.35)] sm:h-auto sm:max-h-[90vh] sm:rounded-2xl"
             initial={{ opacity: 0, scale: 0.98, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: 16 }}
@@ -166,15 +167,30 @@ export default function GeneratePaymentLink({ open = true, onClose, onProceed })
               <X size={20} />
             </button>
 
-            <div className="max-h-[90vh] overflow-y-auto px-8 pb-8 pt-10 sm:pt-11">
-              <h2 id={titleId} className="pr-10 text-[1.375rem] font-bold leading-tight text-[#0F172A]">
-                Generate Payment Link
-              </h2>
-              <p className="mt-2 text-sm text-gray-500">Create a secure checkout link for use</p>
+            <div
+              ref={scrollRef}
+              className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain"
+            >
+              <div className="box-border w-full max-w-full min-w-0 overflow-x-hidden px-5 pb-6 pt-2 sm:px-7 sm:pb-7 sm:pt-3">
+                <div className="pt-10 pr-8 sm:pt-11 sm:pr-10">
+                  <h2
+                    id={titleId}
+                    className="break-words text-xl font-bold text-[#0F172A] sm:text-[1.35rem]"
+                  >
+                    Generate Payment Link
+                  </h2>
+                  <p className="mt-2 break-words text-sm leading-relaxed text-gray-500">
+                    Create a secure checkout link for use
+                  </p>
+                </div>
 
-              <form className="mt-7 space-y-5" onSubmit={handleSubmit} noValidate>
-                <div>
-                  <label htmlFor="purpose" className="mb-1.5 block text-[13px] font-medium text-[#334155]">
+                <form
+                  className="mt-6 w-full min-w-0 max-w-full space-y-5"
+                  onSubmit={handleSubmit}
+                  noValidate
+                >
+                <div className="min-w-0">
+                  <label htmlFor="purpose" className="mb-1.5 block text-sm font-medium text-[#0F172A]">
                     Payment Purpose/Details
                   </label>
                   <input
@@ -195,22 +211,22 @@ export default function GeneratePaymentLink({ open = true, onClose, onProceed })
                   )}
                 </div>
 
-                <div className="w-full sm:w-1/2">
-                  <label htmlFor="price" className="mb-1.5 block text-[13px] font-medium text-[#334155]">
+                <div className="min-w-0 sm:max-w-[50%]">
+                  <label htmlFor="price" className="mb-1.5 block text-sm font-medium text-[#0F172A]">
                     Price (₦)
                   </label>
-                  <div className="flex overflow-hidden rounded-xl border border-gray-200 bg-white focus-within:border-[#0F172A] focus-within:ring-2 focus-within:ring-[#0F172A]/10">
-                    <span className="flex items-center border-r border-gray-200 bg-gray-50 px-3 text-sm text-gray-500">
-                      (₦)
+                  <div className="flex min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white focus-within:border-[#0F172A] focus-within:ring-2 focus-within:ring-[#0F172A]/10">
+                    <span className="flex shrink-0 items-center border-r border-gray-200 bg-gray-50 px-3 text-sm font-medium text-gray-500">
+                      ₦
                     </span>
                     <input
                       id="price"
-                      type="number"
-                      min={0}
-                      step={0.01}
+                      type="text"
+                      inputMode="decimal"
+                      placeholder="0.00"
                       value={priceDisplay}
                       onChange={(event) => {
-                        const raw = event.target.value
+                        const raw = event.target.value.replace(/[^\d.]/g, '')
                         setPriceDisplay(raw)
                         const parsed = parseFloat(raw)
                         const value = Number.isNaN(parsed) ? 0 : parsed
@@ -223,7 +239,7 @@ export default function GeneratePaymentLink({ open = true, onClose, onProceed })
                         setPrice(value)
                         setPriceDisplay(value.toFixed(2))
                       }}
-                      className="w-full bg-white px-3 py-3 text-sm text-[#0F172A] focus:outline-none"
+                      className="min-w-0 flex-1 bg-white px-3 py-3 text-sm text-[#0F172A] focus:outline-none"
                     />
                   </div>
                   {errors.price && (
@@ -233,11 +249,11 @@ export default function GeneratePaymentLink({ open = true, onClose, onProceed })
                   )}
                 </div>
 
-                <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2.5" id={linkToWalletLabelId}>
-                      <Wallet size={20} className="text-[#0F172A]" strokeWidth={1.75} aria-hidden />
-                      <span className="text-sm font-bold text-[#0F172A]">Link to Wallet</span>
+                <div className="min-w-0 rounded-2xl border border-gray-200 bg-white p-4 sm:p-5">
+                  <div className="flex min-w-0 items-center justify-between gap-3">
+                    <div className="flex min-w-0 items-center gap-2.5" id={linkToWalletLabelId}>
+                      <Wallet size={20} className="shrink-0 text-[#0F172A]" strokeWidth={1.75} aria-hidden />
+                      <span className="truncate text-sm font-bold text-[#0F172A]">Link to Wallet</span>
                     </div>
                     <WalletToggle
                       checked={linkToWallet}
@@ -256,14 +272,14 @@ export default function GeneratePaymentLink({ open = true, onClose, onProceed })
                     <div className="overflow-hidden">
                       <div className="border-t border-gray-100 pt-4">
                         <div className="space-y-4">
-                          <div>
+                          <div className="min-w-0">
                             <label
                               htmlFor="allocationMethod"
                               className="mb-1.5 block text-[11px] font-medium uppercase tracking-wider text-gray-400"
                             >
                               Allocation Method
                             </label>
-                            <div className="relative">
+                            <div className="relative min-w-0">
                               <select
                                 id="allocationMethod"
                                 value={allocationMethod}
@@ -289,10 +305,10 @@ export default function GeneratePaymentLink({ open = true, onClose, onProceed })
                           </div>
 
                           {allocationMethod === 'create' ? (
-                            <div>
+                            <div className="min-w-0">
                               <label
                                 htmlFor="walletName"
-                                className="mb-1.5 block text-[13px] font-medium text-[#334155]"
+                                className="mb-1.5 block text-sm font-medium text-[#0F172A]"
                               >
                                 New Wallet Name
                               </label>
@@ -316,14 +332,14 @@ export default function GeneratePaymentLink({ open = true, onClose, onProceed })
                               )}
                             </div>
                           ) : (
-                            <div>
+                            <div className="min-w-0">
                               <label
                                 htmlFor="existingWallet"
-                                className="mb-1.5 block text-[13px] font-medium text-[#334155]"
+                                className="mb-1.5 block text-sm font-medium text-[#0F172A]"
                               >
                                 Select Wallet
                               </label>
-                              <div className="relative">
+                              <div className="relative min-w-0">
                                 <select
                                   id="existingWallet"
                                   value={existingWallet}
@@ -355,12 +371,12 @@ export default function GeneratePaymentLink({ open = true, onClose, onProceed })
                             </div>
                           )}
 
-                          <div>
-                            <div className="flex items-center justify-between gap-3">
-                              <label htmlFor={sliderId} className="text-sm font-semibold text-[#0F172A]">
+                          <div className="min-w-0">
+                            <div className="flex min-w-0 items-center justify-between gap-3">
+                              <label htmlFor={sliderId} className="min-w-0 text-sm font-medium text-[#0F172A]">
                                 Auto-save Percentage
                               </label>
-                              <span className="rounded-full bg-[#E8F5E9] px-3 py-1 text-sm font-semibold text-[#0F172A]">
+                              <span className="shrink-0 rounded-full bg-[#E8F5E9] px-3 py-1 text-sm font-semibold text-[#0F172A]">
                                 {autoSavePercent}%
                               </span>
                             </div>
@@ -394,14 +410,34 @@ export default function GeneratePaymentLink({ open = true, onClose, onProceed })
                   </div>
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#1A1F4E] px-4 py-3.5 text-sm font-bold text-white transition hover:bg-[#252b5c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A1F4E]/40 disabled:cursor-not-allowed disabled:opacity-70"
-                >
-                  {isSubmitting ? 'Processing…' : 'Proceed To Wallet Setup →'}
-                </button>
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    disabled={isSubmitting}
+                    className="flex flex-1 items-center justify-center rounded-xl border border-[#1A1F4E] bg-white px-4 py-3.5 text-sm font-semibold text-[#1A1F4E] transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A1F4E]/30 disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex flex-[2] items-center justify-center gap-2 rounded-xl bg-[#1A1F4E] px-4 py-3.5 text-sm font-semibold text-white transition hover:bg-[#252b5c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A1F4E]/40 disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    {!isSubmitting && (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                        <circle cx="18" cy="5" r="3" />
+                        <circle cx="6" cy="12" r="3" />
+                        <circle cx="18" cy="19" r="3" />
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                      </svg>
+                    )}
+                    {isSubmitting ? 'Generating…' : 'Generate Link'}
+                  </button>
+                </div>
               </form>
+              </div>
             </div>
           </motion.div>
         </motion.div>

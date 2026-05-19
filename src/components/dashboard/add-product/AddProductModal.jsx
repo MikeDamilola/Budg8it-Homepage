@@ -8,9 +8,11 @@ import ProductLiveStep from './ProductLiveStep'
 import { buildPaymentUrl } from './buildPaymentUrl'
 
 const slideTransition = { duration: 0.4, ease: [0.32, 0.72, 0, 1] }
+const STEP_COUNT = 3
 
 export default function AddProductModal({ open, onClose }) {
   const closeButtonRef = useRef(null)
+  const scrollRef = useRef(null)
   const [step, setStep] = useState(1)
   const [productDraft, setProductDraft] = useState(null)
 
@@ -43,6 +45,10 @@ export default function AddProductModal({ open, onClose }) {
     setStep(1)
     setProductDraft(null)
   }, [open])
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0, behavior: 'instant' })
+  }, [step])
 
   const handleAddProductProceed = (data) => {
     setProductDraft((prev) => ({ ...prev, ...data }))
@@ -83,7 +89,7 @@ export default function AddProductModal({ open, onClose }) {
             role="dialog"
             aria-modal="true"
             aria-label="Add product"
-            className="relative flex max-h-[95vh] w-full max-w-[500px] flex-col overflow-hidden rounded-t-2xl bg-white shadow-[0_24px_80px_-12px_rgba(15,23,42,0.35)] sm:rounded-2xl"
+            className="relative flex h-[min(92dvh,95vh)] max-h-[min(95dvh,95vh)] w-full max-w-[500px] flex-col overflow-hidden rounded-t-2xl bg-white shadow-[0_24px_80px_-12px_rgba(15,23,42,0.35)] sm:h-auto sm:max-h-[90vh] sm:rounded-2xl"
             initial={{ opacity: 0, scale: 0.98, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: 16 }}
@@ -119,24 +125,27 @@ export default function AddProductModal({ open, onClose }) {
               </>
             )}
 
-            <div className="min-h-0 flex-1 overflow-hidden">
+            <div
+              ref={scrollRef}
+              className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain"
+            >
               <motion.div
-                className="flex h-full"
-                animate={{ x: `-${(step - 1) * 100}%` }}
+                className="flex"
+                animate={{ x: `-${((step - 1) / STEP_COUNT) * 100}%` }}
                 transition={slideTransition}
               >
-                <div className="h-full w-full shrink-0 overflow-y-auto">
+                <div className="box-border w-full min-w-full max-w-full shrink-0 overflow-x-hidden">
                   <AddProductStep onProceed={handleAddProductProceed} />
                 </div>
 
-                <div className="h-full w-full shrink-0 overflow-y-auto">
+                <div className="min-w-full shrink-0">
                   <ConfigureWalletStep
                     onProceed={handleWalletProceed}
                     initialAutoSavePercent={productDraft?.autoSavePercent}
                   />
                 </div>
 
-                <div className="h-full w-full shrink-0 overflow-y-auto">
+                <div className="min-w-full shrink-0">
                   <ProductLiveStep paymentUrl={paymentUrl} onDone={handleDone} />
                 </div>
               </motion.div>

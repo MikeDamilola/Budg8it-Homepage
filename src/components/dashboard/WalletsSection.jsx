@@ -33,13 +33,14 @@ const wallets = [
   },
 ]
 
-export default function WalletsSection() {
+export default function WalletsSection({ onAddWallet }) {
   return (
     <section className="mb-8">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-bold text-[#0F172A]">Your Wallets</h2>
         <button
           type="button"
+          onClick={onAddWallet}
           className="flex cursor-pointer items-center gap-1.5 rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-[#0F172A] transition hover:bg-gray-50"
         >
           <Plus size={16} aria-hidden />

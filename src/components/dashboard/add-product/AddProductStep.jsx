@@ -7,6 +7,9 @@ import { addProductSchema } from './addProductSchema'
 const ACCEPTED_EXTENSIONS =
   'JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT'
 
+const inputClassName =
+  'box-border w-full max-w-full min-w-0 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#0F172A] placeholder:text-gray-400 transition focus:border-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10'
+
 function formatNaira(value) {
   const num = Number(value)
   if (Number.isNaN(num)) return '₦0.00'
@@ -91,17 +94,24 @@ export default function AddProductStep({ onProceed }) {
   }
 
   return (
-    <div className="px-5 pb-6 pt-2 sm:px-7 sm:pb-7 sm:pt-3">
-      <h2 id={titleId} className="text-xl font-bold text-[#0F172A] sm:text-[1.35rem]">
+    <div className="box-border w-full max-w-full min-w-0 overflow-x-hidden px-5 pb-6 pt-2 sm:px-7 sm:pb-7 sm:pt-3">
+      <h2
+        id={titleId}
+        className="break-words text-xl font-bold text-[#0F172A] sm:text-[1.35rem]"
+      >
         Add a New Product
       </h2>
-      <p className="mt-2 text-sm leading-relaxed text-gray-500">
+      <p className="mt-2 break-words text-sm leading-relaxed text-gray-500">
         Fill in your product details below to create a unique payment link that you can share
         with your buyers.
       </p>
 
-      <form className="mt-6 space-y-5" onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div>
+      <form
+        className="mt-6 w-full min-w-0 max-w-full space-y-5"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+      >
+        <div className="min-w-0">
           <label htmlFor="productName" className="mb-1.5 block text-sm font-medium text-[#0F172A]">
             Product Name
           </label>
@@ -109,7 +119,7 @@ export default function AddProductStep({ onProceed }) {
             id="productName"
             type="text"
             placeholder="e.g Organic Shea Butter (250g)"
-            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#0F172A] placeholder:text-gray-400 transition focus:border-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
+            className={inputClassName}
             {...register('productName')}
           />
           {errors.productName && (
@@ -119,13 +129,13 @@ export default function AddProductStep({ onProceed }) {
           )}
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
+        <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="min-w-0">
             <label htmlFor="price" className="mb-1.5 block text-sm font-medium text-[#0F172A]">
               Price (₦)
             </label>
-            <div className="flex overflow-hidden rounded-xl border border-gray-200 focus-within:border-[#0F172A] focus-within:ring-2 focus-within:ring-[#0F172A]/10">
-              <span className="flex items-center border-r border-gray-200 bg-gray-50 px-3 text-sm font-medium text-gray-500">
+            <div className="flex min-w-0 overflow-hidden rounded-xl border border-gray-200 focus-within:border-[#0F172A] focus-within:ring-2 focus-within:ring-[#0F172A]/10">
+              <span className="flex shrink-0 items-center border-r border-gray-200 bg-gray-50 px-3 text-sm font-medium text-gray-500">
                 ₦
               </span>
               <input
@@ -134,7 +144,7 @@ export default function AddProductStep({ onProceed }) {
                 inputMode="decimal"
                 placeholder="0.00"
                 value={priceDisplay}
-                className="w-full bg-white px-3 py-3 text-sm text-[#0F172A] focus:outline-none"
+                className="min-w-0 flex-1 bg-white px-3 py-3 text-sm text-[#0F172A] focus:outline-none"
                 onChange={(event) => {
                   const raw = event.target.value.replace(/[^\d.]/g, '')
                   setPriceDisplay(raw)
@@ -159,7 +169,7 @@ export default function AddProductStep({ onProceed }) {
             )}
           </div>
 
-          <div>
+          <div className="min-w-0">
             <label
               htmlFor="stocksQuantity"
               className="mb-1.5 block text-sm font-medium text-[#0F172A]"
@@ -172,7 +182,7 @@ export default function AddProductStep({ onProceed }) {
               min={1}
               step={1}
               placeholder="E.g 20"
-              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#0F172A] placeholder:text-gray-400 transition focus:border-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
+              className={inputClassName}
               {...register('stocksQuantity')}
             />
             {errors.stocksQuantity && (
@@ -183,7 +193,7 @@ export default function AddProductStep({ onProceed }) {
           </div>
         </div>
 
-        <div>
+        <div className="min-w-0">
           <span className="mb-1.5 block text-sm font-medium text-[#0F172A]">Upload Image</span>
           <div
             role="button"
@@ -207,7 +217,7 @@ export default function AddProductStep({ onProceed }) {
               setIsDragging(false)
             }}
             onDrop={onDrop}
-            className={`relative flex min-h-[160px] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-4 py-8 text-center transition ${
+            className={`relative box-border flex min-h-[160px] w-full max-w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-4 py-8 text-center transition ${
               isDragging
                 ? 'border-[#0F172A] bg-[#0F172A]/5'
                 : 'border-gray-200 bg-gray-50/50 hover:border-gray-300'
@@ -226,11 +236,11 @@ export default function AddProductStep({ onProceed }) {
             />
 
             {previewUrl ? (
-              <div className="relative">
+              <div className="relative max-w-full px-2">
                 <img
                   src={previewUrl}
                   alt="Product preview"
-                  className="max-h-28 max-w-full rounded-lg object-contain"
+                  className="mx-auto max-h-28 max-w-full rounded-lg object-contain"
                 />
                 <button
                   type="button"
@@ -238,7 +248,7 @@ export default function AddProductStep({ onProceed }) {
                     event.stopPropagation()
                     removeImage()
                   }}
-                  className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#0F172A] text-white shadow-md transition hover:bg-[#1e293b]"
+                  className="absolute right-0 top-0 flex h-7 w-7 items-center justify-center rounded-full bg-[#0F172A] text-white shadow-md transition hover:bg-[#1e293b]"
                   aria-label="Remove image"
                 >
                   <X size={14} />
@@ -252,7 +262,7 @@ export default function AddProductStep({ onProceed }) {
                   strokeWidth={1.5}
                   aria-hidden
                 />
-                <p className="text-sm text-gray-600">
+                <p className="break-words px-1 text-sm text-gray-600">
                   <span className="font-medium text-[#0F172A]">Drag & drop file</span> or{' '}
                   <button
                     type="button"
@@ -268,21 +278,23 @@ export default function AddProductStep({ onProceed }) {
               </>
             )}
           </div>
-          <p className="mt-2 text-xs text-gray-400">Supported formats: {ACCEPTED_EXTENSIONS}</p>
+          <p className="mt-2 break-words text-xs text-gray-400">
+            Supported formats: {ACCEPTED_EXTENSIONS}
+          </p>
           {errors.image && (
             <p className="mt-1.5 text-xs text-red-500" role="alert">
               {errors.image.message}
             </p>
           )}
           {imageFile && !previewUrl && (
-            <p className="mt-1 text-xs text-gray-500">{imageFile.name}</p>
+            <p className="mt-1 truncate text-xs text-gray-500">{imageFile.name}</p>
           )}
         </div>
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#0F172A] px-4 py-3.5 text-sm font-semibold text-white transition hover:bg-[#1e293b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F172A]/40 disabled:cursor-not-allowed disabled:opacity-70"
+          className="box-border flex w-full max-w-full min-w-0 items-center justify-center gap-2 rounded-xl bg-[#0F172A] px-4 py-3.5 text-sm font-semibold text-white transition hover:bg-[#1e293b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F172A]/40 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isSubmitting ? (
             <>

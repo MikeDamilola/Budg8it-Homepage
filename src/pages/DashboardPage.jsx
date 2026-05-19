@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import AddProductModal from '../components/dashboard/add-product/AddProductModal'
 import GeneratePaymentLink from '../components/dashboard/generate-payment-link/GeneratePaymentLink'
+import CreateNewWallet from '../components/dashboard/create-wallet/CreateNewWallet'
+import WalletCreatedSuccess from '../components/dashboard/create-wallet/WalletCreatedSuccess'
 import DashboardLayout from '../components/dashboard/DashboardLayout'
 import ProductsSection from '../components/dashboard/ProductsSection'
 import MobileQuickActions from '../components/dashboard/MobileQuickActions'
@@ -18,20 +20,24 @@ const footerItems = [
 export default function DashboardPage() {
   const [isAddProductOpen, setIsAddProductOpen] = useState(false)
   const [isGenerateLinkOpen, setIsGenerateLinkOpen] = useState(false)
+  const [isCreateWalletOpen, setIsCreateWalletOpen] = useState(false)
+  const [walletSuccessData, setWalletSuccessData] = useState(null)
 
   const openAddProduct = () => setIsAddProductOpen(true)
   const openGenerateLink = () => setIsGenerateLinkOpen(true)
+  const openCreateWallet = () => setIsCreateWalletOpen(true)
 
-  const handleCloseAddProduct = () => {
-    setIsAddProductOpen(false)
+  const handleCloseAddProduct = () => setIsAddProductOpen(false)
+  const handleCloseGenerateLink = () => setIsGenerateLinkOpen(false)
+  const handleGenerateLinkProceed = () => setIsGenerateLinkOpen(false)
+
+  const handleWalletCreated = (data) => {
+    setIsCreateWalletOpen(false)
+    setWalletSuccessData(data)
   }
 
-  const handleCloseGenerateLink = () => {
-    setIsGenerateLinkOpen(false)
-  }
-
-  const handleGenerateLinkProceed = () => {
-    setIsGenerateLinkOpen(false)
+  const handleWalletSuccessDone = () => {
+    setWalletSuccessData(null)
   }
 
   return (
@@ -45,7 +51,7 @@ export default function DashboardPage() {
 
       <StatsRow />
       <MobileQuickActions onAddProduct={openAddProduct} onGenerateLink={openGenerateLink} />
-      <WalletsSection />
+      <WalletsSection onAddWallet={openCreateWallet} />
       <ProductsSection />
 
       <footer className="mt-8 flex flex-wrap items-center justify-center gap-4 border-t border-gray-100 py-6 sm:gap-6">
@@ -60,6 +66,27 @@ export default function DashboardPage() {
       </footer>
 
       <AddProductModal open={isAddProductOpen} onClose={handleCloseAddProduct} />
+      <CreateNewWallet
+        open={isCreateWalletOpen}
+        onClose={() => setIsCreateWalletOpen(false)}
+        onCreateWallet={handleWalletCreated}
+      />
+      <WalletCreatedSuccess
+        open={!!walletSuccessData}
+        walletName={walletSuccessData?.walletName ?? ''}
+        linkedProducts={
+          walletSuccessData?.linkedProductData?.isExisting &&
+          walletSuccessData?.linkedProductData?.productName
+            ? [
+                {
+                  id: walletSuccessData.linkedProductData.productId ?? 'new',
+                  name: walletSuccessData.linkedProductData.productName,
+                },
+              ]
+            : []
+        }
+        onDone={handleWalletSuccessDone}
+      />
       <GeneratePaymentLink
         open={isGenerateLinkOpen}
         onClose={handleCloseGenerateLink}
