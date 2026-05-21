@@ -99,7 +99,7 @@ export default function WalletCreatedSuccess({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain">
-              <div className="px-5 pb-7 pt-7 sm:px-7 sm:pb-8 sm:pt-8">
+              <div className="box-border w-full min-w-0 max-w-full overflow-x-hidden px-5 pb-7 pt-7 sm:px-7 sm:pb-8 sm:pt-8">
 
                 {/* ── Success icon + heading ── */}
                 <div className="flex flex-col items-center text-center">

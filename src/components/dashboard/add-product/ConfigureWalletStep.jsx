@@ -15,7 +15,7 @@ export default function ConfigureWalletStep({
   }, [initialAutoSavePercent])
 
   return (
-    <div className="px-5 pb-6 pt-2 sm:px-7 sm:pb-7 sm:pt-3">
+    <div className="box-border w-full min-w-0 max-w-full overflow-x-hidden px-5 pb-6 pt-2 sm:px-7 sm:pb-7 sm:pt-3">
       <h2 id={titleId} className="text-xl font-bold text-[#0F172A] sm:text-[1.35rem]">
         Configure Your Wallet
       </h2>

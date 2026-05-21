@@ -37,7 +37,7 @@ export default function ProductLiveStep({ paymentUrl, onDone }) {
   }
 
   return (
-    <div className="px-5 pb-6 pt-5 sm:px-7 sm:pb-7 sm:pt-6">
+    <div className="box-border w-full min-w-0 max-w-full overflow-x-hidden px-5 pb-6 pt-5 sm:px-7 sm:pb-7 sm:pt-6">
       <div className="flex flex-col items-center text-center">
         <div className="relative flex h-16 w-16 items-center justify-center">
           <div className="absolute inset-0 rounded-full bg-slate-300/60" aria-hidden />

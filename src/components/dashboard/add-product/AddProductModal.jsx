@@ -7,13 +7,13 @@ import ProductFlowStepper from './ProductFlowStepper'
 import ProductLiveStep from './ProductLiveStep'
 import { buildPaymentUrl } from './buildPaymentUrl'
 
-const slideTransition = { duration: 0.4, ease: [0.32, 0.72, 0, 1] }
-const STEP_COUNT = 3
+const STEP_TRANSITION = { duration: 0.28, ease: [0.22, 1, 0.36, 1] }
 
 export default function AddProductModal({ open, onClose }) {
   const closeButtonRef = useRef(null)
   const scrollRef = useRef(null)
   const [step, setStep] = useState(1)
+  const [direction, setDirection] = useState(1)
   const [productDraft, setProductDraft] = useState(null)
 
   const paymentUrl = useMemo(
@@ -43,6 +43,7 @@ export default function AddProductModal({ open, onClose }) {
   useEffect(() => {
     if (open) return
     setStep(1)
+    setDirection(1)
     setProductDraft(null)
   }, [open])
 
@@ -50,23 +51,21 @@ export default function AddProductModal({ open, onClose }) {
     scrollRef.current?.scrollTo({ top: 0, behavior: 'instant' })
   }, [step])
 
-  const handleAddProductProceed = (data) => {
-    setProductDraft((prev) => ({ ...prev, ...data }))
-    setStep(2)
+  const goForward = (nextStep, updater) => {
+    setDirection(1)
+    if (updater) setProductDraft((prev) => ({ ...prev, ...updater }))
+    setStep(nextStep)
   }
 
-  const handleBackToAddProduct = () => {
-    setStep(1)
+  const goBack = (prevStep) => {
+    setDirection(-1)
+    setStep(prevStep)
   }
 
-  const handleWalletProceed = (autoSavePercent) => {
-    setProductDraft((prev) => ({ ...prev, autoSavePercent }))
-    setStep(3)
-  }
-
-  const handleDone = () => {
-    onClose()
-  }
+  const handleAddProductProceed = (data) => goForward(2, data)
+  const handleBackToAddProduct = () => goBack(1)
+  const handleWalletProceed = (autoSavePercent) => goForward(3, { autoSavePercent })
+  const handleDone = () => onClose()
 
   return (
     <AnimatePresence>
@@ -96,8 +95,10 @@ export default function AddProductModal({ open, onClose }) {
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             onClick={(event) => event.stopPropagation()}
           >
-            {step !== 3 && (
-              <>
+            {/* Stepper header — always visible across all steps */}
+            <div className="relative z-10 shrink-0 px-5 pb-3 pt-3 sm:px-7 sm:pb-4">
+              {/* Close (X) button — only on steps 1 and 2; step 3 uses the Done button */}
+              {step !== 3 && (
                 <button
                   ref={closeButtonRef}
                   type="button"
@@ -107,48 +108,53 @@ export default function AddProductModal({ open, onClose }) {
                 >
                   <X size={20} />
                 </button>
+              )}
+              <div className={step !== 3 ? 'pt-10 pr-8 sm:pt-11 sm:pr-10' : 'pt-2'}>
+                <ProductFlowStepper
+                  currentStep={step}
+                  onStepClick={
+                    step === 2
+                      ? (stepId) => { if (stepId === 1) handleBackToAddProduct() }
+                      : undefined
+                  }
+                />
+              </div>
+            </div>
 
-                <div className="relative z-10 shrink-0 px-5 pb-3 pt-3 sm:px-7 sm:pb-4">
-                  <div className="pt-10 pr-8 sm:pt-11 sm:pr-10">
-                    <ProductFlowStepper
-                      currentStep={step}
-                      onStepClick={
-                        step === 2
-                          ? (stepId) => {
-                              if (stepId === 1) handleBackToAddProduct()
-                            }
-                          : undefined
-                      }
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-
+            {/* Single-step view: only the active step is mounted */}
             <div
               ref={scrollRef}
               className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain"
             >
-              <motion.div
-                className="flex"
-                animate={{ x: `-${((step - 1) / STEP_COUNT) * 100}%` }}
-                transition={slideTransition}
-              >
-                <div className="box-border w-full min-w-full max-w-full shrink-0 overflow-x-hidden">
-                  <AddProductStep onProceed={handleAddProductProceed} />
-                </div>
-
-                <div className="min-w-full shrink-0">
-                  <ConfigureWalletStep
-                    onProceed={handleWalletProceed}
-                    initialAutoSavePercent={productDraft?.autoSavePercent}
-                  />
-                </div>
-
-                <div className="min-w-full shrink-0">
-                  <ProductLiveStep paymentUrl={paymentUrl} onDone={handleDone} />
-                </div>
-              </motion.div>
+              <AnimatePresence initial={false} mode="wait" custom={direction}>
+                <motion.div
+                  key={step}
+                  custom={direction}
+                  variants={{
+                    enter: (dir) => ({ opacity: 0, x: dir > 0 ? 40 : -40 }),
+                    center: { opacity: 1, x: 0 },
+                    exit: (dir) => ({ opacity: 0, x: dir > 0 ? -40 : 40 }),
+                  }}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={STEP_TRANSITION}
+                  className="w-full"
+                >
+                  {step === 1 && (
+                    <AddProductStep onProceed={handleAddProductProceed} />
+                  )}
+                  {step === 2 && (
+                    <ConfigureWalletStep
+                      onProceed={handleWalletProceed}
+                      initialAutoSavePercent={productDraft?.autoSavePercent}
+                    />
+                  )}
+                  {step === 3 && (
+                    <ProductLiveStep paymentUrl={paymentUrl} onDone={handleDone} />
+                  )}
+                </motion.div>
+              </AnimatePresence>
             </div>
           </motion.div>
         </motion.div>
