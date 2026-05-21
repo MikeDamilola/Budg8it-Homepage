@@ -1,4 +1,5 @@
-import { Link as LinkIcon, ShoppingCart } from 'lucide-react'
+import { Link as LinkIcon } from 'lucide-react'
+import addProductIconUrl from '../../assets/Add Product.svg'
 
 export default function QuickActions({ onAddProduct, onGenerateLink }) {
   return (
@@ -11,7 +12,7 @@ export default function QuickActions({ onAddProduct, onGenerateLink }) {
           className="flex w-full cursor-pointer items-center gap-3 rounded-xl bg-[#0F172A] px-3 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
         >
           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/10">
-            <ShoppingCart size={16} className="text-white" />
+            <img src={addProductIconUrl} alt="" width={16} height={16} className="h-4 w-4 object-contain brightness-0 invert" decoding="async" />
           </span>
           Add Product
         </button>

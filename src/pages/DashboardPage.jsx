@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import AddProductModal from '../components/dashboard/add-product/AddProductModal'
 import GeneratePaymentLink from '../components/dashboard/generate-payment-link/GeneratePaymentLink'
+import PaymentLinkSuccess from '../components/dashboard/generate-payment-link/PaymentLinkSuccess'
 import CreateNewWallet from '../components/dashboard/create-wallet/CreateNewWallet'
 import WalletCreatedSuccess from '../components/dashboard/create-wallet/WalletCreatedSuccess'
 import DashboardLayout from '../components/dashboard/DashboardLayout'
 import ProductsSection from '../components/dashboard/ProductsSection'
 import MobileQuickActions from '../components/dashboard/MobileQuickActions'
+import QuickActions from '../components/dashboard/QuickActions'
+import RecentTransactions from '../components/dashboard/RecentTransactions'
+import StoreLinkCard from '../components/dashboard/StoreLinkCard'
 import StatsRow from '../components/dashboard/StatsRow'
 import WalletsSection from '../components/dashboard/WalletsSection'
 
@@ -20,6 +24,7 @@ const footerItems = [
 export default function DashboardPage() {
   const [isAddProductOpen, setIsAddProductOpen] = useState(false)
   const [isGenerateLinkOpen, setIsGenerateLinkOpen] = useState(false)
+  const [paymentLinkSuccessData, setPaymentLinkSuccessData] = useState(null)
   const [isCreateWalletOpen, setIsCreateWalletOpen] = useState(false)
   const [walletSuccessData, setWalletSuccessData] = useState(null)
 
@@ -29,7 +34,13 @@ export default function DashboardPage() {
 
   const handleCloseAddProduct = () => setIsAddProductOpen(false)
   const handleCloseGenerateLink = () => setIsGenerateLinkOpen(false)
-  const handleGenerateLinkProceed = () => setIsGenerateLinkOpen(false)
+
+  const handleGenerateLinkProceed = (data) => {
+    setIsGenerateLinkOpen(false)
+    setPaymentLinkSuccessData(data)
+  }
+
+  const handlePaymentLinkSuccessDone = () => setPaymentLinkSuccessData(null)
 
   const handleWalletCreated = (data) => {
     setIsCreateWalletOpen(false)
@@ -40,8 +51,20 @@ export default function DashboardPage() {
     setWalletSuccessData(null)
   }
 
+  const rightPanel = (
+    <>
+      <QuickActions onAddProduct={openAddProduct} onGenerateLink={openGenerateLink} />
+      <div className="mt-2 flex flex-col gap-6">
+        <StoreLinkCard />
+        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+          <RecentTransactions />
+        </div>
+      </div>
+    </>
+  )
+
   return (
-    <DashboardLayout onOpenAddProduct={openAddProduct} onOpenGenerateLink={openGenerateLink}>
+    <DashboardLayout rightPanel={rightPanel}>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-[#0F172A]">Welcome back, Serah</h1>
         <p className="mt-1 text-sm text-gray-400">
@@ -91,6 +114,13 @@ export default function DashboardPage() {
         open={isGenerateLinkOpen}
         onClose={handleCloseGenerateLink}
         onProceed={handleGenerateLinkProceed}
+      />
+      <PaymentLinkSuccess
+        open={!!paymentLinkSuccessData}
+        purpose={paymentLinkSuccessData?.purpose ?? ''}
+        linkToWallet={paymentLinkSuccessData?.linkToWallet ?? false}
+        walletName={paymentLinkSuccessData?.walletName ?? ''}
+        onDone={handlePaymentLinkSuccessDone}
       />
     </DashboardLayout>
   )

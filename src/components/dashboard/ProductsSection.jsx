@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   ArrowRight,
   Copy,
@@ -41,6 +42,7 @@ const products = [
 ]
 
 export default function ProductsSection() {
+  const navigate = useNavigate()
   const [openMenu, setOpenMenu] = useState(null)
 
   useEffect(() => {
@@ -59,6 +61,7 @@ export default function ProductsSection() {
         <h2 className="text-lg font-bold text-[#0F172A]">Your Products</h2>
         <button
           type="button"
+          onClick={() => navigate('/products')}
           className="flex cursor-pointer items-center gap-1.5 rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-[#0F172A] transition hover:bg-gray-50"
         >
           View All

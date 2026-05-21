@@ -9,7 +9,7 @@ import { buildPaymentUrl } from './buildPaymentUrl'
 
 const STEP_TRANSITION = { duration: 0.28, ease: [0.22, 1, 0.36, 1] }
 
-export default function AddProductModal({ open, onClose }) {
+export default function AddProductModal({ open, onClose, onProductCreated }) {
   const closeButtonRef = useRef(null)
   const scrollRef = useRef(null)
   const [step, setStep] = useState(1)
@@ -65,7 +65,23 @@ export default function AddProductModal({ open, onClose }) {
   const handleAddProductProceed = (data) => goForward(2, data)
   const handleBackToAddProduct = () => goBack(1)
   const handleWalletProceed = (autoSavePercent) => goForward(3, { autoSavePercent })
-  const handleDone = () => onClose()
+
+  const handleDone = () => {
+    if (productDraft) {
+      onProductCreated?.({
+        name: productDraft.productName ?? 'New Product',
+        price: productDraft.price ?? 0,
+        stockQuantity: productDraft.stocksQuantity ?? 0,
+        autoSavePercent: productDraft.autoSavePercent ?? 40,
+        paymentUrl: paymentUrl,
+        // Create a temporary blob URL from the uploaded File so the grid can preview it
+        image: productDraft.image instanceof File
+          ? URL.createObjectURL(productDraft.image)
+          : null,
+      })
+    }
+    onClose()
+  }
 
   return (
     <AnimatePresence>
