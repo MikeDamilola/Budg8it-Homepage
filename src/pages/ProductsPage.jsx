@@ -6,6 +6,7 @@ import DashboardLayout from '../components/dashboard/DashboardLayout'
 import ProductCard from '../components/dashboard/ProductCard'
 import AddProductModal from '../components/dashboard/add-product/AddProductModal'
 import EditProductModal from '../components/dashboard/add-product/EditProductModal'
+import ManageProductModal from '../components/dashboard/ManageProductModal'
 import product1 from '../assets/Product1.png'
 import product2 from '../assets/Product2.png'
 import product3 from '../assets/Product3.png'
@@ -24,6 +25,7 @@ const INITIAL_PRODUCTS = [
     autoSavePercent: 15,
     paymentUrl: 'pay.budg8it.com/p/leather-messenger-bag',
     image: product1,
+    linkedWallet: { name: 'Business Savings', totalSavings: 6000 },
   },
   {
     id: '2',
@@ -35,6 +37,7 @@ const INITIAL_PRODUCTS = [
     autoSavePercent: 20,
     paymentUrl: 'pay.budg8it.com/p/canvas-tote-bag',
     image: product2,
+    linkedWallet: { name: 'Emergency Fund', totalSavings: 5120 },
   },
   {
     id: '3',
@@ -46,6 +49,7 @@ const INITIAL_PRODUCTS = [
     autoSavePercent: 10,
     paymentUrl: 'pay.budg8it.com/p/herbal-face-cream',
     image: product3,
+    linkedWallet: { name: 'Product Revenue', totalSavings: 20400 },
   },
   {
     id: '4',
@@ -57,6 +61,7 @@ const INITIAL_PRODUCTS = [
     autoSavePercent: 15,
     paymentUrl: 'pay.budg8it.com/p/organic-shea-butter',
     image: product1,
+    linkedWallet: null,
   },
   {
     id: '5',
@@ -68,6 +73,7 @@ const INITIAL_PRODUCTS = [
     autoSavePercent: 25,
     paymentUrl: 'pay.budg8it.com/p/natural-hair-oil',
     image: product2,
+    linkedWallet: { name: 'Hair Care Savings', totalSavings: 8000 },
   },
   {
     id: '6',
@@ -79,6 +85,7 @@ const INITIAL_PRODUCTS = [
     autoSavePercent: 10,
     paymentUrl: 'pay.budg8it.com/p/aloe-vera-gel',
     image: product3,
+    linkedWallet: null,
   },
   {
     id: '7',
@@ -90,6 +97,7 @@ const INITIAL_PRODUCTS = [
     autoSavePercent: 20,
     paymentUrl: 'pay.budg8it.com/p/vitamin-c-serum',
     image: product1,
+    linkedWallet: { name: 'Skincare Fund', totalSavings: 8500 },
   },
   {
     id: '8',
@@ -101,6 +109,7 @@ const INITIAL_PRODUCTS = [
     autoSavePercent: 15,
     paymentUrl: 'pay.budg8it.com/p/coconut-body-lotion',
     image: product2,
+    linkedWallet: { name: 'Business Savings', totalSavings: 9600 },
   },
 ]
 
@@ -117,11 +126,17 @@ export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isAddProductOpen, setIsAddProductOpen] = useState(false)
   const [editProductId, setEditProductId] = useState(null)
+  const [manageProductId, setManageProductId] = useState(null)
   const [showEditToast, setShowEditToast] = useState(false)
 
   const productToEdit = useMemo(
     () => products.find((p) => p.id === editProductId) ?? null,
     [products, editProductId]
+  )
+
+  const productToManage = useMemo(
+    () => products.find((p) => p.id === manageProductId) ?? null,
+    [products, manageProductId]
   )
 
   const filteredProducts = useMemo(
@@ -147,7 +162,6 @@ export default function ProductsPage() {
   }
 
   const handleDeleteProduct = (id) => {
-    if (!window.confirm('Are you sure you want to delete this product?')) return
     setProducts((prev) => prev.filter((p) => p.id !== id))
   }
 
@@ -165,8 +179,7 @@ export default function ProductsPage() {
 
 
   const handleManageProduct = (id) => {
-    // Future: navigate to product detail page
-    console.info('Manage product', id)
+    setManageProductId(id)
   }
 
   return (
@@ -231,8 +244,6 @@ export default function ProductsPage() {
               key={product.id}
               product={product}
               onManageProduct={handleManageProduct}
-              onEditProduct={handleEditProduct}
-              onDeleteProduct={handleDeleteProduct}
             />
           ))}
         </div>
@@ -279,6 +290,18 @@ export default function ProductsPage() {
         product={productToEdit}
         onClose={() => setEditProductId(null)}
         onSave={handleSaveEdit}
+      />
+
+      {/* ── Manage Product Modal ── */}
+      <ManageProductModal
+        open={manageProductId !== null}
+        product={productToManage}
+        onClose={() => setManageProductId(null)}
+        onEditProduct={(id) => {
+          setManageProductId(null)
+          setEditProductId(id)
+        }}
+        onDeleteProduct={handleDeleteProduct}
       />
     </DashboardLayout>
   )

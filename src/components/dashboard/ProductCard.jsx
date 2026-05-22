@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Check, Copy, Edit2, MoreVertical, ShoppingBag, Trash2 } from 'lucide-react'
+import { Check, Copy, MoreVertical, ShoppingBag } from 'lucide-react'
 
 function formatNaira(amount) {
   return `₦${Number(amount).toLocaleString('en-NG', { minimumFractionDigits: 2 })}`
@@ -8,8 +8,6 @@ function formatNaira(amount) {
 export default function ProductCard({
   product,
   onManageProduct,
-  onEditProduct,
-  onDeleteProduct,
 }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -118,31 +116,6 @@ export default function ProductCard({
                   </span>
                 </button>
 
-                <div className="mx-3 border-t border-gray-100" />
-
-                {/* Edit product */}
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={() => { onEditProduct?.(product.id); setMenuOpen(false) }}
-                  className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-[#0F172A] transition hover:bg-gray-50"
-                >
-                  <Edit2 size={14} className="shrink-0 text-gray-400" />
-                  <span className="font-medium">Edit Product</span>
-                </button>
-
-                <div className="mx-3 border-t border-gray-100" />
-
-                {/* Delete product */}
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={() => { onDeleteProduct?.(product.id); setMenuOpen(false) }}
-                  className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-red-500 transition hover:bg-red-50"
-                >
-                  <Trash2 size={14} className="shrink-0" />
-                  <span className="font-medium">Delete Product</span>
-                </button>
               </div>
             )}
           </div>
