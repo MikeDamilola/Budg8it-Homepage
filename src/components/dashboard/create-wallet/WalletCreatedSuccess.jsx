@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Check, Clipboard, Download, Package } from 'lucide-react'
+import { Check, Clipboard, Download, GraduationCap } from 'lucide-react'
 import { QRCodeCanvas, QRCodeSVG } from 'qrcode.react'
 
 function buildWalletUrl(walletName) {
@@ -154,7 +154,7 @@ export default function WalletCreatedSuccess({
                 <div className="mt-4 rounded-xl border border-gray-200 bg-white p-4">
                   {!hasProducts ? (
                     <div className="flex items-center gap-3">
-                      <Package
+                      <GraduationCap
                         size={20}
                         className="shrink-0 text-gray-400"
                         strokeWidth={1.75}
@@ -165,7 +165,7 @@ export default function WalletCreatedSuccess({
                   ) : (
                     <div>
                       <div className="flex items-center gap-3">
-                        <Package
+                        <GraduationCap
                           size={20}
                           className="shrink-0 text-[#1A1F4E]"
                           strokeWidth={1.75}
@@ -201,14 +201,14 @@ export default function WalletCreatedSuccess({
                     </div>
 
                     <div className="flex min-w-0 flex-1 flex-col justify-center">
-                      <p className="text-[15px] font-bold text-[#0F172A]">Wallet QR Code</p>
+                      <p className="text-[15px] font-bold text-[#0F172A]">Product QR Code</p>
                       <p className="mt-1 text-[13px] leading-relaxed text-gray-500">
-                        Download this code for physical point-of-sale displays
+                        Download this code for physical point-of- sale displays
                       </p>
                       <button
                         type="button"
                         onClick={handleDownloadQr}
-                        className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[#0F172A] transition hover:opacity-80 focus-visible:outline-none"
+                        className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[#0D7A5F] transition hover:opacity-80 focus-visible:outline-none"
                       >
                         <Download size={16} aria-hidden />
                         Download QR Code

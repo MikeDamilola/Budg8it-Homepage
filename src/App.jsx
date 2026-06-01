@@ -6,6 +6,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage.jsx'
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
 import ProductsPage from './pages/ProductsPage.jsx'
+import WalletPage from './pages/WalletPage.jsx'
 
 export default function App() {
   return (
@@ -18,7 +19,7 @@ export default function App() {
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/products" element={<ProductsPage />} />
-        <Route path="/wallet" element={<DashboardPage />} />
+        <Route path="/wallet" element={<WalletPage />} />
         <Route path="/transactions" element={<DashboardPage />} />
         <Route path="/settings" element={<DashboardPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

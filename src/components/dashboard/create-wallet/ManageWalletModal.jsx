@@ -13,6 +13,9 @@ const SAMPLE_PRODUCTS = [
 const inputClassName =
   'box-border w-full max-w-full min-w-0 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#0F172A] placeholder:text-gray-400 transition focus:border-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10'
 
+const formatNaira = (amount) =>
+  `₦${Number(amount ?? 0).toLocaleString('en-NG', { minimumFractionDigits: 2 })}`
+
 function Toggle({ checked, onChange, labelId }) {
   return (
     <button
@@ -36,11 +39,11 @@ function Toggle({ checked, onChange, labelId }) {
   )
 }
 
-export default function CreateNewWallet({
-  open = true,
+export default function ManageWalletModal({
+  open = false,
+  wallet,
   onClose,
-  onToggleLinkProducts,
-  onCreateWallet,
+  onSave,
 }) {
   const closeButtonRef = useRef(null)
   const scrollRef = useRef(null)
@@ -48,12 +51,10 @@ export default function CreateNewWallet({
   const sliderId = useId()
   const linkProductsLabelId = useId()
 
-  const [walletName, setWalletName] = useState('')
   const [savingsDuration, setSavingsDuration] = useState('')
   const [autoSavePercent, setAutoSavePercent] = useState(40)
   const [linkProducts, setLinkProducts] = useState(false)
   const [linkedProductData, setLinkedProductData] = useState(null)
-  const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const withdrawalPercent = 100 - autoSavePercent
@@ -77,38 +78,24 @@ export default function CreateNewWallet({
     return () => window.removeEventListener('keydown', handler)
   }, [open, onClose])
 
-  // Reset state on close
+  // Initialise form from wallet when opened
   useEffect(() => {
-    if (open) return
-    setWalletName('')
-    setSavingsDuration('')
-    setAutoSavePercent(40)
-    setLinkProducts(false)
+    if (!open || !wallet) return
+    setSavingsDuration(wallet.savingsDuration ?? '')
+    setAutoSavePercent(wallet.autoSavePercent ?? 40)
+    setLinkProducts((wallet.linkedProductsCount ?? 0) > 0)
     setLinkedProductData(null)
-    setErrors({})
     setIsSubmitting(false)
-  }, [open])
-
-  const handleToggleLinkProducts = (value) => {
-    setLinkProducts(value)
-    onToggleLinkProducts?.(value)
-  }
-
-  const validate = () => {
-    const next = {}
-    if (!walletName.trim()) next.walletName = 'Wallet name is required'
-    setErrors(next)
-    return Object.keys(next).length === 0
-  }
+  }, [open, wallet])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!validate()) return
+    if (!wallet) return
     setIsSubmitting(true)
     try {
       await new Promise((res) => setTimeout(res, 350))
-      onCreateWallet?.({
-        walletName: walletName.trim(),
+      onSave?.({
+        walletId: wallet.id,
         savingsDuration,
         autoSavePercent,
         linkProducts,
@@ -118,6 +105,8 @@ export default function CreateNewWallet({
       setIsSubmitting(false)
     }
   }
+
+  if (!wallet) return null
 
   return (
     <AnimatePresence>
@@ -129,15 +118,13 @@ export default function CreateNewWallet({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
         >
-          {/* Backdrop */}
           <button
             type="button"
-            aria-label="Close create wallet"
+            aria-label="Close manage wallet"
             className="absolute inset-0 bg-black/70"
             onClick={onClose}
           />
 
-          {/* Modal card */}
           <motion.div
             role="dialog"
             aria-modal="true"
@@ -149,31 +136,27 @@ export default function CreateNewWallet({
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button */}
             <button
               ref={closeButtonRef}
               type="button"
               onClick={onClose}
               aria-label="Close"
-              className="absolute right-3 top-3 z-30 rounded-full p-2 text-gray-400 transition hover:bg-gray-100 hover:text-[#0F172A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F172A]/30 sm:right-4 sm:top-4"
+              className="absolute right-3 top-3 z-30 rounded-lg border border-gray-200 p-2 text-gray-400 transition hover:bg-gray-100 hover:text-[#0F172A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F172A]/30 sm:right-4 sm:top-4"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
 
-            {/* Scrollable body */}
             <div
               ref={scrollRef}
               className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain"
             >
               <div className="box-border w-full min-w-0 max-w-full overflow-x-hidden px-5 pb-6 pt-2 sm:px-7 sm:pb-7 sm:pt-3">
-
-                {/* Header */}
                 <div className="pt-10 pr-8 sm:pt-11 sm:pr-10">
                   <h2
                     id={titleId}
                     className="break-words text-xl font-bold text-[#0F172A] sm:text-[1.35rem]"
                   >
-                    Create New Wallet
+                    Manage Wallet
                   </h2>
                 </div>
 
@@ -182,43 +165,37 @@ export default function CreateNewWallet({
                   onSubmit={handleSubmit}
                   noValidate
                 >
-                  {/* Wallet Name */}
-                  <div className="min-w-0">
-                    <label
-                      htmlFor="walletName"
-                      className="mb-1.5 block text-sm font-medium text-[#0F172A]"
-                    >
-                      Wallet Name
-                    </label>
-                    <input
-                      id="walletName"
-                      type="text"
-                      value={walletName}
-                      onChange={(e) => {
-                        setWalletName(e.target.value)
-                        if (errors.walletName) setErrors((prev) => ({ ...prev, walletName: undefined }))
-                      }}
-                      placeholder="e.g Consultation Fee"
-                      className={inputClassName}
-                    />
-                    {errors.walletName && (
-                      <p className="mt-1.5 text-xs text-red-500" role="alert">
-                        {errors.walletName}
+                  {/* Summary cards */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="rounded-xl bg-[#E8F5F0] px-4 py-3">
+                      <p className="text-[11px] font-medium text-[#0D7A5F]/80">
+                        Withdrawable Balance
                       </p>
-                    )}
+                      <p className="mt-1 text-lg font-bold text-[#0D7A5F]">
+                        {formatNaira(wallet.withdrawableBalance)}
+                      </p>
+                    </div>
+                    <div className="rounded-xl bg-[#EEF0F8] px-4 py-3">
+                      <p className="text-[11px] font-medium text-[#1A1F4E]/70">
+                        In Savings
+                      </p>
+                      <p className="mt-1 text-lg font-bold text-[#1A1F4E]">
+                        {autoSavePercent}%
+                      </p>
+                    </div>
                   </div>
 
                   {/* Savings Duration */}
                   <div className="min-w-0">
                     <label
-                      htmlFor="savingsDuration"
+                      htmlFor="manageSavingsDuration"
                       className="mb-1.5 block text-sm font-medium text-[#0F172A]"
                     >
                       Savings Duration
                     </label>
                     <div className="relative">
                       <select
-                        id="savingsDuration"
+                        id="manageSavingsDuration"
                         value={savingsDuration}
                         onChange={(e) => setSavingsDuration(e.target.value)}
                         className={`${inputClassName} appearance-none pr-10 ${savingsDuration === '' ? 'text-gray-400' : 'text-[#0F172A]'}`}
@@ -269,7 +246,6 @@ export default function CreateNewWallet({
                       }}
                     />
 
-                    {/* Inline split labels */}
                     <div className="mt-2 flex justify-between">
                       <span className="text-[11px] font-medium uppercase tracking-wide text-gray-400">
                         WITHDRAWAL {withdrawalPercent}%
@@ -282,7 +258,6 @@ export default function CreateNewWallet({
 
                   {/* Link Products card */}
                   <div className="min-w-0 rounded-2xl border border-gray-200 bg-white p-4 sm:p-5">
-                    {/* Toggle row — always visible */}
                     <div className="flex min-w-0 items-center justify-between gap-3">
                       <div
                         className="flex min-w-0 items-center gap-2.5"
@@ -300,12 +275,11 @@ export default function CreateNewWallet({
                       </div>
                       <Toggle
                         checked={linkProducts}
-                        onChange={handleToggleLinkProducts}
+                        onChange={setLinkProducts}
                         labelId={linkProductsLabelId}
                       />
                     </div>
 
-                    {/* Animated expanded section */}
                     <div
                       className={`grid transition-[grid-template-rows,opacity,margin] duration-300 ease-in-out ${
                         linkProducts
@@ -324,14 +298,23 @@ export default function CreateNewWallet({
                     </div>
                   </div>
 
-                  {/* CTA */}
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="box-border flex w-full min-w-0 max-w-full items-center justify-center gap-2 rounded-xl bg-[#1A1F4E] px-4 py-3.5 text-sm font-semibold text-white transition hover:bg-[#252b5c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A1F4E]/40 disabled:cursor-not-allowed disabled:opacity-70"
-                  >
-                    {isSubmitting ? 'Creating…' : 'Create Wallet →'}
-                  </button>
+                  {/* Footer actions */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={onClose}
+                      className="rounded-xl border border-[#1A1F4E] bg-white px-4 py-3.5 text-sm font-semibold text-[#1A1F4E] transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A1F4E]/30"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="rounded-xl bg-[#1A1F4E] px-4 py-3.5 text-sm font-semibold text-white transition hover:bg-[#252b5c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A1F4E]/40 disabled:cursor-not-allowed disabled:opacity-70"
+                    >
+                      {isSubmitting ? 'Saving…' : 'Save Changes'}
+                    </button>
+                  </div>
                 </form>
               </div>
             </div>
