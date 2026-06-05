@@ -1,9 +1,15 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Link2, Plus, Search } from 'lucide-react'
 import SuccessBanner from '../components/ui/SuccessBanner'
 import DashboardLayout from '../components/dashboard/DashboardLayout'
 import WalletCard from '../components/dashboard/WalletCard'
 import BreakSavingsModal from '../components/dashboard/BreakSavingsModal'
+import WithdrawFundsModal from '../components/dashboard/WithdrawFundsModal'
+import SecurityPinModal from '../components/dashboard/SecurityPinModal'
+import SecurityPinSuccessModal from '../components/dashboard/SecurityPinSuccessModal'
+import TransferSuccessfulModal from '../components/dashboard/TransferSuccessfulModal'
+import { buildReceiptText, createTransferReceipt } from '../utils/transferReceipt'
 import CreateNewWallet from '../components/dashboard/create-wallet/CreateNewWallet'
 import ManageWalletModal from '../components/dashboard/create-wallet/ManageWalletModal'
 import WalletCreatedSuccess from '../components/dashboard/create-wallet/WalletCreatedSuccess'
@@ -96,10 +102,18 @@ const footerLinks = [
 ]
 
 export default function WalletPage() {
+  const navigate = useNavigate()
   const [wallets, setWallets] = useState(MOCK_WALLETS)
   const [showCreateWallet, setShowCreateWallet] = useState(false)
   const [walletSuccessData, setWalletSuccessData] = useState(null)
   const [manageWalletId, setManageWalletId] = useState(null)
+  const [withdrawWalletId, setWithdrawWalletId] = useState(null)
+  const [withdrawFormData, setWithdrawFormData] = useState(null)
+  const [showSecurityPin, setShowSecurityPin] = useState(false)
+  const [showSecurityPinSuccess, setShowSecurityPinSuccess] = useState(false)
+  const [showTransferSuccess, setShowTransferSuccess] = useState(false)
+  const [transferReceipt, setTransferReceipt] = useState(null)
+  const [pinSuccessVariant, setPinSuccessVariant] = useState('created')
   const [showManageSuccess, setShowManageSuccess] = useState(false)
   const [breakSavingsWallet, setBreakSavingsWallet] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
@@ -134,7 +148,76 @@ export default function WalletPage() {
   )
 
   const handleWithdraw = (id) => {
-    console.info('Withdraw from wallet', id)
+    setWithdrawWalletId(id)
+  }
+
+  const walletToWithdraw = useMemo(
+    () => wallets.find((w) => w.id === withdrawWalletId) ?? null,
+    [wallets, withdrawWalletId]
+  )
+
+  const handleSaveWithdraw = (data) => {
+    setWithdrawFormData(data)
+    setWithdrawWalletId(null)
+    setShowSecurityPin(true)
+  }
+
+  const openTransferSuccess = () => {
+    setShowSecurityPin(false)
+    setShowSecurityPinSuccess(false)
+    setTransferReceipt(createTransferReceipt())
+    setShowTransferSuccess(true)
+  }
+
+  const handleSecurityPinContinue = ({ action }) => {
+    if (action === 'verified') {
+      openTransferSuccess()
+      return
+    }
+
+    setShowSecurityPin(false)
+    setPinSuccessVariant(action === 'reset' ? 'reset' : 'created')
+    setShowSecurityPinSuccess(true)
+  }
+
+  const closeWithdrawFlow = () => {
+    setWithdrawWalletId(null)
+    setWithdrawFormData(null)
+    setShowSecurityPin(false)
+    setShowSecurityPinSuccess(false)
+    setShowTransferSuccess(false)
+    setTransferReceipt(null)
+    setPinSuccessVariant('created')
+  }
+
+  const handleVerifyWithdraw = () => {
+    openTransferSuccess()
+  }
+
+  const handleTransferSuccessBackToDashboard = () => {
+    closeWithdrawFlow()
+    navigate('/dashboard')
+  }
+
+  const handleDownloadReceipt = () => {
+    if (!withdrawFormData || !transferReceipt) return
+
+    const receiptText = buildReceiptText({
+      ...withdrawFormData,
+      ...transferReceipt,
+    })
+    const blob = new Blob([receiptText], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${transferReceipt.transactionId}-receipt.txt`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const handleBackToDashboard = () => {
+    closeWithdrawFlow()
+    navigate('/dashboard')
   }
 
   const handleManageWallet = (id) => {
@@ -408,6 +491,40 @@ export default function WalletPage() {
         wallet={walletToManage}
         onClose={() => setManageWalletId(null)}
         onSave={handleSaveWalletChanges}
+      />
+
+      {/* ── Withdraw Funds Modal ── */}
+      <WithdrawFundsModal
+        open={withdrawWalletId !== null}
+        wallet={walletToWithdraw}
+        onClose={() => setWithdrawWalletId(null)}
+        onSave={handleSaveWithdraw}
+      />
+
+      {/* ── Security PIN Modal ── */}
+      <SecurityPinModal
+        open={showSecurityPin}
+        onClose={closeWithdrawFlow}
+        onContinue={handleSecurityPinContinue}
+      />
+
+      {/* ── Security PIN Success Modal ── */}
+      <SecurityPinSuccessModal
+        open={showSecurityPinSuccess}
+        variant={pinSuccessVariant}
+        onVerifyWithdraw={handleVerifyWithdraw}
+        onBackToDashboard={handleBackToDashboard}
+      />
+
+      <TransferSuccessfulModal
+        open={showTransferSuccess}
+        amount={withdrawFormData?.amount}
+        bankName={withdrawFormData?.bankName}
+        accountNumber={withdrawFormData?.accountNumber}
+        transactionId={transferReceipt?.transactionId}
+        transactionDate={transferReceipt?.transactionDate}
+        onBackToDashboard={handleTransferSuccessBackToDashboard}
+        onDownloadReceipt={handleDownloadReceipt}
       />
 
       {/* ── Break Savings Modal ── */}

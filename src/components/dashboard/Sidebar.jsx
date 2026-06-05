@@ -1,7 +1,12 @@
 import { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { BarChart2 } from 'lucide-react'
 import logoUrl from '../../assets/Logo.svg'
 import { dashboardNavItems } from './dashboardNavItems'
+
+const lucideIcons = {
+  BarChart2,
+}
 
 export default function Sidebar() {
   const navigate = useNavigate()
@@ -27,6 +32,7 @@ export default function Sidebar() {
       <nav className="flex flex-1 flex-col gap-0.5 px-0">
         {dashboardNavItems.map((item) => {
           const isActive = active === item.label
+          const LucideIcon = item.lucideIcon ? lucideIcons[item.lucideIcon] : null
           const iconClass =
             item.iconTone === 'light'
               ? isActive
@@ -46,7 +52,16 @@ export default function Sidebar() {
                   : 'text-gray-500 hover:bg-gray-50 hover:text-[#0F172A]'
               }`}
             >
-              <img src={item.iconSrc} alt="" className={iconClass} width={20} height={20} decoding="async" />
+              {LucideIcon ? (
+                <LucideIcon
+                  size={20}
+                  className={`shrink-0 ${isActive ? 'text-white' : 'text-gray-500'}`}
+                  strokeWidth={1.75}
+                  aria-hidden
+                />
+              ) : (
+                <img src={item.iconSrc} alt="" className={iconClass} width={20} height={20} decoding="async" />
+              )}
               {item.label}
             </button>
           )

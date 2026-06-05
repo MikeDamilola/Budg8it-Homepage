@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage.jsx'
 import SignUpPage from './pages/SignUpPage.jsx'
@@ -8,9 +9,20 @@ import DashboardPage from './pages/DashboardPage.jsx'
 import ProductsPage from './pages/ProductsPage.jsx'
 import WalletPage from './pages/WalletPage.jsx'
 
+const ReportsAnalyticsPage = lazy(() => import('./pages/ReportsAnalyticsPage.jsx'))
+
+function PageLoader() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[#F5F2FF] text-sm text-[#64748B]">
+      Loading…
+    </div>
+  )
+}
+
 export default function App() {
   return (
     <BrowserRouter>
+      <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignUpPage />} />
@@ -20,10 +32,12 @@ export default function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/wallet" element={<WalletPage />} />
+        <Route path="/reports" element={<ReportsAnalyticsPage />} />
         <Route path="/transactions" element={<DashboardPage />} />
         <Route path="/settings" element={<DashboardPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }

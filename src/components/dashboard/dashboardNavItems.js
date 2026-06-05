@@ -24,6 +24,12 @@ export const dashboardNavItems = [
     iconTone: 'dark',
   },
   {
+    label: 'Report & Analytics',
+    href: '/reports',
+    iconType: 'lucide',
+    lucideIcon: 'BarChart2',
+  },
+  {
     label: 'Transactions',
     href: '/transactions',
     iconSrc: transactionsIconUrl,

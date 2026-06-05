@@ -1,9 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, BarChart2 } from 'lucide-react'
 import logoUrl from '../../assets/Logo.svg'
 import { dashboardNavItems } from './dashboardNavItems'
+
+const lucideIcons = {
+  BarChart2,
+}
 
 export default function MobileDashboardNav() {
   const [open, setOpen] = useState(false)
@@ -89,6 +93,7 @@ export default function MobileDashboardNav() {
                 <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-0 py-3">
                   {dashboardNavItems.map((item) => {
                     const isActive = active === item.label
+                    const LucideIcon = item.lucideIcon ? lucideIcons[item.lucideIcon] : null
                     const iconClass =
                       item.iconTone === 'light'
                         ? isActive
@@ -108,14 +113,23 @@ export default function MobileDashboardNav() {
                             : 'text-gray-500 hover:bg-gray-50 hover:text-[#0F172A]'
                         }`}
                       >
-                        <img
-                          src={item.iconSrc}
-                          alt=""
-                          className={iconClass}
-                          width={20}
-                          height={20}
-                          decoding="async"
-                        />
+                        {LucideIcon ? (
+                          <LucideIcon
+                            size={20}
+                            className={`shrink-0 ${isActive ? 'text-white' : 'text-gray-500'}`}
+                            strokeWidth={1.75}
+                            aria-hidden
+                          />
+                        ) : (
+                          <img
+                            src={item.iconSrc}
+                            alt=""
+                            className={iconClass}
+                            width={20}
+                            height={20}
+                            decoding="async"
+                          />
+                        )}
                         {item.label}
                       </button>
                     )
