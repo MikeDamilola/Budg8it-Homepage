@@ -8,6 +8,8 @@ import ResetPasswordPage from './pages/ResetPasswordPage.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
 import ProductsPage from './pages/ProductsPage.jsx'
 import WalletPage from './pages/WalletPage.jsx'
+import TransactionsPage from './pages/TransactionsPage.jsx'
+import SettingsPage from './pages/SettingsPage.jsx'
 
 const ReportsAnalyticsPage = lazy(() => import('./pages/ReportsAnalyticsPage.jsx'))
 
@@ -33,8 +35,8 @@ export default function App() {
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/wallet" element={<WalletPage />} />
         <Route path="/reports" element={<ReportsAnalyticsPage />} />
-        <Route path="/transactions" element={<DashboardPage />} />
-        <Route path="/settings" element={<DashboardPage />} />
+        <Route path="/transactions" element={<TransactionsPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       </Suspense>
